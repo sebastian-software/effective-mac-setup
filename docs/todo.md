@@ -1,6 +1,6 @@
 # TODO
 
-Prioritized list for the React/TypeScript notebook setup.
+Prioritized list for the macOS developer setup.
 
 ## New Session
 
@@ -37,7 +37,7 @@ Prioritized list for the React/TypeScript notebook setup.
   - `gh auth status`
 - [ ] Verify the 1Password SSH Agent in a normal terminal:
   - `ssh -T git@github.com`
-- [ ] Run `brew bundle --file Brewfile` to install missing CLI tools and apps.
+- [ ] Run `brew bundle --file Brewfile` to install missing CLI tools, Go/Rust tooling, and apps.
 - [ ] Open a new terminal and verify the Node setup:
   - `node --version`
   - `npm --version`
@@ -68,6 +68,11 @@ Prioritized list for the React/TypeScript notebook setup.
 
 - [ ] Create a Vite React/TypeScript smoke test.
 - [ ] Create a Next.js App Router smoke test.
+- [ ] Verify Go toolchain:
+  - `go version`
+- [ ] Verify Rust toolchain:
+  - `rustc --version`
+  - `cargo --version`
 - [ ] Document shared project standards:
   - `pnpm`
   - TypeScript strict mode

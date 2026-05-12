@@ -4,7 +4,7 @@ Short rationale for the main setup decisions.
 
 ## Node via fnm Instead of Homebrew Node
 
-Homebrew remains the package manager for CLI tools and apps. Node.js itself is managed through `fnm` because React/TypeScript projects often expect different Node versions.
+Homebrew remains the package manager for CLI tools and apps. Node.js itself is managed through `fnm` because modern frontend projects often expect different Node versions.
 
 Benefits:
 
@@ -37,7 +37,11 @@ gh auth status
 
 ## Brewfile
 
-The `Brewfile` is the reproducible package list. It should stay intentionally small and include only the tools that are actually useful on this notebook.
+The `Brewfile` is the reproducible package list. It should stay intentionally small and include only the tools that are actually useful on a lean macOS developer machine.
+
+## Go and Rust
+
+Go and Rust are included because they commonly appear next to modern frontend work in infrastructure, CLIs, build tooling, developer platforms, and edge/runtime ecosystems. They should be available without turning this setup into a heavy backend workstation.
 
 ## Dotfiles as Templates
 

@@ -16,19 +16,19 @@ The GitHub repo is public. `main` is pushed.
 GitHub Description:
 
 ```text
-Effective macOS setup for a lightweight React and TypeScript development environment.
+Effective macOS developer setup for modern Node.js frontend development, Go, Rust, and dotfiles.
 ```
 
 GitHub Topics:
 
 ```text
-developer-setup, dotfiles, homebrew, macos, react, typescript
+developer-setup, dotfiles, frontend, go, homebrew, macos, react, rust, typescript
 ```
 
 Additional Labels:
 
 ```text
-setup, dotfiles, macos, typescript, automation, safe-change
+setup, dotfiles, macos, typescript, automation, safe-change, frontend, go, rust
 ```
 
 Latest known commit before this translation work:
@@ -41,7 +41,7 @@ Commit style: Conventional Commits.
 
 ## Goal
 
-A lightweight, fast MacBook setup as an alternative to the Mac Studio, focused on React/TypeScript development.
+A lightweight, fast macOS developer setup focused on modern Node.js frontend development, with Go and Rust included for common infrastructure and tooling workflows.
 
 The repo should serve as installation guide, status log, Brewfile, and eventually the dotfile source of truth.
 
@@ -121,11 +121,12 @@ Details: [dotfiles-plan.md](dotfiles-plan.md)
 ssh -T git@github.com
 ```
 
-- Run `brew bundle --file Brewfile`.
+- Run `brew bundle --file Brewfile` to install the remaining CLI tools, Go/Rust tooling, and apps.
 - Finalize editor decision: VS Code, Cursor, or both.
 - Install/check browsers: Chrome, Firefox, Safari.
 - Install OrbStack only if local Docker/container workflows are actually needed.
 - Document a Vite React/TypeScript smoke test.
+- Verify and document Go/Rust toolchain checks.
 - Document a Next.js App Router smoke test.
 
 ## Important Conventions

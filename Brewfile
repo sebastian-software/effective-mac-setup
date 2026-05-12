@@ -13,6 +13,10 @@ brew "eza"
 brew "tree"
 brew "direnv"
 
+# Common infrastructure/tooling languages
+brew "go"
+brew "rustup-init"
+
 # Optional but useful for local web development
 brew "watchman"
 

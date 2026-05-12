@@ -27,6 +27,8 @@ Date: 2026-05-12
 | npm | 11.12.1 |
 | Corepack | 0.34.6 |
 | pnpm | 11.1.1 |
+| Go | Planned in Brewfile; not yet verified |
+| Rust | Planned in Brewfile; not yet verified |
 
 ## Apps Found
 

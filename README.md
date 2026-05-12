@@ -1,8 +1,8 @@
 # effective-mac-setup
 
-A reproducible, lightweight macOS development setup for React and TypeScript projects.
+A reproducible, lightweight macOS developer setup for modern Node.js frontend development and common infrastructure tooling.
 
-Goal: keep the notebook fast and lean while still making it ready for modern web development.
+Goal: keep a macOS device fast and lean while still making it ready for modern frontend work with TypeScript, React, Node.js, Go, and Rust.
 
 ## Current Status
 
@@ -15,6 +15,7 @@ Checked on 2026-05-12:
 - GitHub CLI 2.92.0 installed and authenticated
 - `fnm` 1.39.0 installed
 - Node.js LTS 24.15.0 via `fnm`
+- Go and Rust planned as standard infrastructure toolchains
 - npm 11.12.1
 - Corepack 0.34.6
 - pnpm 11.1.1
@@ -85,11 +86,13 @@ gh auth login
 
 ## Recommended Project Defaults
 
+- Primary frontend runtime: Node.js LTS via fnm
 - Simple React SPAs: Vite + React + TypeScript
 - Product-like web apps: Next.js App Router
 - Package manager: pnpm via Corepack
 - Tests: Vitest for unit/component tests, Playwright for browser/E2E tests
 - Linting/formatting: ESLint + Prettier
+- Infrastructure-adjacent tooling: Go and Rust via Homebrew/rustup as needed
 
 ## Next Steps
 
