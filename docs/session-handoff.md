@@ -8,10 +8,10 @@ Dieses Dokument ist der Einstiegspunkt fuer eine neue Codex-Session.
 
 ```text
 ~/Workspace/effective-mac-setup
-https://github.com/swernerx/effective-mac-setup
+https://github.com/sebastian-software/effective-mac-setup
 ```
 
-Das GitHub-Repo ist privat. `main` ist gepusht.
+Das GitHub-Repo ist public. `main` ist gepusht.
 
 Letzter bekannter Commit:
 
@@ -30,7 +30,7 @@ Das Repo soll gleichzeitig Installationsanleitung, Statusprotokoll, Brewfile und
 ## Erledigt
 
 - Repo nach `~/Workspace/effective-mac-setup` verschoben.
-- GitHub-Repo `swernerx/effective-mac-setup` angelegt.
+- GitHub-Repo `sebastian-software/effective-mac-setup` angelegt.
 - Initial Commit auf Conventional Commit umbenannt.
 - `fnm` via Homebrew installiert.
 - Node.js LTS 24.15.0 via `fnm` installiert.
