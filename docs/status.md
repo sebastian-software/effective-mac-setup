@@ -1,57 +1,57 @@
 # Status
 
-Stand: 2026-05-12
+Date: 2026-05-12
 
 ## System
 
-| Bereich | Status |
+| Area | Status |
 | --- | --- |
-| macOS | 26.5, Build 25F71 |
-| Architektur | Apple Silicon `arm64` |
-| Xcode Command Line Tools | Installiert: `/Library/Developer/CommandLineTools` |
+| macOS | 26.5, build 25F71 |
+| Architecture | Apple Silicon `arm64` |
+| Xcode Command Line Tools | Installed: `/Library/Developer/CommandLineTools` |
 | Homebrew | 5.1.11 |
-| Homebrew Prefix | `/opt/homebrew` |
+| Homebrew prefix | `/opt/homebrew` |
 
-## Entwicklung
+## Development
 
 | Tool | Status |
 | --- | --- |
-| Git | Apple Git 2.50.1 vorhanden; Homebrew Git im Brewfile vorgesehen |
-| Git user.name | Noch offen |
-| Git user.email | Noch offen |
-| GitHub CLI | 2.92.0 installiert |
-| GitHub Login | Verifiziert im normalen Terminal: Account `swernerx`, SSH-Protokoll, Token im Keyring. |
-| SSH-Agent | Laeuft bewusst ueber 1Password SSH Agent; in Codex-Sandbox nicht sinnvoll pruefbar. |
-| fnm | 1.39.0 installiert |
+| Git | Apple Git 2.50.1 available; Homebrew Git is listed in the Brewfile |
+| Git user.name | Still open |
+| Git user.email | Still open |
+| GitHub CLI | 2.92.0 installed |
+| GitHub Login | Verified in a normal terminal: account `swernerx`, SSH protocol, token in the keyring. |
+| SSH Agent | Intentionally handled by the 1Password SSH Agent; not meaningful to verify from the Codex sandbox. |
+| fnm | 1.39.0 installed |
 | Node.js | 24.15.0 LTS via fnm |
 | npm | 11.12.1 |
 | Corepack | 0.34.6 |
 | pnpm | 11.1.1 |
 
-## Apps gefunden
+## Apps Found
 
 - 1Password
 - Backblaze
 - Codex
 - Fantastical
 - Lungo
-- Microsoft Office Apps
+- Microsoft Office apps
 - Pure Paste
 - Safari
 - Tailscale
 - Velja
 - Xcode
 
-## Bereits geaendert
+## Changes Already Made
 
-`~/.zshrc` wurde um fnm erweitert:
+`~/.zshrc` was extended for fnm:
 
 ```sh
 # Node.js version manager
 eval "$(fnm env --use-on-cd --shell zsh)"
 ```
 
-`~/.zprofile` enthielt bereits Homebrew shellenv:
+`~/.zprofile` already contained the Homebrew shellenv setup:
 
 ```sh
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
@@ -59,13 +59,13 @@ eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 
 ## Repo
 
-Stabiler Pfad:
+Stable path:
 
 ```text
 ~/Workspace/effective-mac-setup
 ```
 
-## Bewusste Annahmen
+## Assumptions
 
-- SSH-Keys werden nicht klassisch unter `~/.ssh` generiert oder verwaltet, sondern ueber den 1Password SSH Agent.
-- GitHub CLI Login wird im normalen Terminal/Keychain-Kontext geprueft. Codex kann hier einen anderen Zugriffskontext sehen.
+- SSH keys are not generated or managed directly under `~/.ssh`; they are handled by the 1Password SSH Agent.
+- GitHub CLI login is verified in a normal terminal/keychain context. Codex may see a different access context.

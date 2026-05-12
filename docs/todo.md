@@ -1,54 +1,54 @@
 # TODO
 
-Priorisierte Liste fuer das React/TypeScript-Notebook.
+Prioritized list for the React/TypeScript notebook setup.
 
-## Neue Session
+## New Session
 
-- [ ] Einstieg ueber [session-handoff.md](session-handoff.md) lesen.
-- [ ] Repo-Status pruefen:
+- [ ] Read the entry point in [session-handoff.md](session-handoff.md).
+- [ ] Check repository status:
   - `git status --short --branch`
   - `git pull --ff-only`
 
-## Erledigt
+## Done
 
-- [x] macOS-Version und Architektur geprueft.
-- [x] Xcode Command Line Tools geprueft.
-- [x] Homebrew geprueft.
-- [x] `fnm` via Homebrew installiert.
-- [x] `~/.zshrc` fuer `fnm` ergaenzt.
-- [x] Node.js LTS 24.15.0 via `fnm` installiert.
-- [x] Corepack aktiviert.
-- [x] `pnpm` ueber Corepack initialisiert.
-- [x] Dieses Setup als Git-Repo initialisiert.
+- [x] Checked macOS version and architecture.
+- [x] Checked Xcode Command Line Tools.
+- [x] Checked Homebrew.
+- [x] Installed `fnm` via Homebrew.
+- [x] Extended `~/.zshrc` for `fnm`.
+- [x] Installed Node.js LTS 24.15.0 via `fnm`.
+- [x] Enabled Corepack.
+- [x] Initialized `pnpm` through Corepack.
+- [x] Initialized this setup as a Git repository.
 
-## Als Naechstes
+## Next
 
-- [ ] Dotfile-Symlink-Konzept finalisieren:
+- [ ] Finalize the dotfile symlink concept:
   - `docs/dotfiles-plan.md`
-- [x] Repo an stabilen Ort verschoben: `~/Workspace/effective-mac-setup`.
-- [ ] TypeScript-Dotfile-Manager implementieren:
+- [x] Moved the repo to a stable path: `~/Workspace/effective-mac-setup`.
+- [ ] Implement the TypeScript dotfile manager:
   - `pnpm dotfiles:check`
   - `pnpm dotfiles:apply`
   - `pnpm dotfiles:repair`
-- [ ] Git Identitaet in `~/.gitconfig.local` setzen:
-  - `git config --global user.name "Dein Name"`
-  - `git config --global user.email "deine@email"`
-- [x] GitHub CLI im normalen Terminal verifiziert:
+- [ ] Set Git identity in `~/.gitconfig.local`:
+  - `git config --global user.name "Your Name"`
+  - `git config --global user.email "your@email"`
+- [x] Verified GitHub CLI in a normal terminal:
   - `gh auth status`
-- [ ] 1Password SSH Agent im normalen Terminal verifizieren:
+- [ ] Verify the 1Password SSH Agent in a normal terminal:
   - `ssh -T git@github.com`
-- [ ] `brew bundle --file Brewfile` ausfuehren, um fehlende CLI-Tools und Apps zu installieren.
-- [ ] Neues Terminal oeffnen und Node-Setup pruefen:
+- [ ] Run `brew bundle --file Brewfile` to install missing CLI tools and apps.
+- [ ] Open a new terminal and verify the Node setup:
   - `node --version`
   - `npm --version`
   - `pnpm --version`
 
 ## Editor
 
-- [ ] VS Code oder Cursor entscheiden.
-- [ ] VS Code Shell Command pruefen:
+- [ ] Decide on VS Code, Cursor, or both.
+- [ ] Check the VS Code shell command:
   - `code --version`
-- [ ] Extensions installieren:
+- [ ] Install extensions:
   - ESLint
   - Prettier
   - Tailwind CSS IntelliSense
@@ -57,18 +57,18 @@ Priorisierte Liste fuer das React/TypeScript-Notebook.
   - GitLens optional
   - Error Lens optional
 
-## Browser und Runtime
+## Browsers and Runtime
 
-- [ ] Chrome installieren.
-- [ ] Firefox installieren.
-- [ ] Safari fuer WebKit-Checks verwenden.
-- [ ] OrbStack installieren, falls Docker/Container gebraucht werden.
+- [ ] Install Chrome.
+- [ ] Install Firefox.
+- [ ] Use Safari for WebKit checks.
+- [ ] Install OrbStack if Docker/containers are actually needed.
 
-## Projekt-Templates
+## Project Templates
 
-- [ ] Vite React/TypeScript Smoke-Test anlegen.
-- [ ] Next.js App Router Smoke-Test anlegen.
-- [ ] Gemeinsame Projektstandards notieren:
+- [ ] Create a Vite React/TypeScript smoke test.
+- [ ] Create a Next.js App Router smoke test.
+- [ ] Document shared project standards:
   - `pnpm`
   - TypeScript strict mode
   - ESLint
@@ -76,19 +76,19 @@ Priorisierte Liste fuer das React/TypeScript-Notebook.
   - Vitest
   - Playwright
 
-## macOS/Arbeitskomfort
+## macOS and Work Comfort
 
-- [ ] FileVault in Systemeinstellungen pruefen.
-- [ ] Touch ID und Apple Watch Unlock pruefen.
-- [x] 1Password vorhanden; SSH Agent wird darueber genutzt.
-- [ ] Backblaze Backup-Status pruefen.
-- [ ] Tailscale Login/Netzwerk pruefen.
-- [ ] Raycast pruefen oder installieren.
-- [ ] Zwischenablage-Tool: Maccy oder vorhandenes Pure Paste bewusst entscheiden.
+- [ ] Check FileVault in System Settings.
+- [ ] Check Touch ID and Apple Watch Unlock.
+- [x] 1Password is installed; the SSH Agent is used through it.
+- [ ] Check Backblaze backup status.
+- [ ] Check Tailscale login/network status.
+- [ ] Check or install Raycast.
+- [ ] Decide between Maccy and the existing Pure Paste setup for clipboard handling.
 
 ## Optional
 
-- [ ] `direnv` fuer Projekt-ENV aktivieren.
-- [ ] Dotfiles-Repo anlegen oder dieses Repo dafuer erweitern.
-- [ ] Brewfile nach persoenlichen Vorlieben ausduennen.
-- [ ] CI-Check fuer Beispielprojekt dokumentieren.
+- [ ] Enable `direnv` for project-specific environments.
+- [ ] Create a separate dotfiles repo or extend this repo for that purpose.
+- [ ] Trim the Brewfile to personal preferences.
+- [ ] Document a CI check for an example project.

@@ -1,27 +1,27 @@
-# Entscheidungen
+# Decisions
 
-Kurze Begruendung fuer die wichtigsten Setup-Entscheidungen.
+Short rationale for the main setup decisions.
 
-## Node via fnm statt Homebrew Node
+## Node via fnm Instead of Homebrew Node
 
-Homebrew bleibt der Paketmanager fuer CLI-Tools und Apps. Node.js selbst wird ueber `fnm` verwaltet, weil React/TypeScript-Projekte haeufig verschiedene Node-Versionen erwarten.
+Homebrew remains the package manager for CLI tools and apps. Node.js itself is managed through `fnm` because React/TypeScript projects often expect different Node versions.
 
-Vorteile:
+Benefits:
 
-- Projektnahe Node-Versionen ueber `.node-version` oder aehnliche Dateien.
-- Schneller und schlanker als viele aeltere Node-Version-Manager.
-- Weniger globale Kopplung als `brew install node`.
-- Gute Kombination mit Corepack und pnpm.
+- Project-specific Node versions through `.node-version` or similar files.
+- Faster and leaner than many older Node version managers.
+- Less global coupling than `brew install node`.
+- Works well with Corepack and pnpm.
 
 ## pnpm via Corepack
 
-Corepack ist bei modernen Node-Versionen dabei und kann pnpm projektbezogen bereitstellen. Dadurch muss pnpm nicht zwingend als separates globales npm-Paket installiert werden.
+Corepack ships with modern Node versions and can provide pnpm per project. That means pnpm does not need to be installed as a separate global npm package.
 
-## SSH ueber 1Password
+## SSH via 1Password
 
-SSH-Keys werden ueber den 1Password SSH Agent verwaltet. Dieses Setup erzeugt daher keinen neuen lokalen SSH-Key und aendert keine `~/.ssh/config`, solange das nicht explizit gewuenscht ist.
+SSH keys are managed through the 1Password SSH Agent. This setup does not generate a new local SSH key and does not change `~/.ssh/config` unless explicitly requested.
 
-Pruefung im normalen Terminal:
+Check it in a normal terminal:
 
 ```sh
 ssh -T git@github.com
@@ -29,7 +29,7 @@ ssh -T git@github.com
 
 ## GitHub CLI
 
-`gh` ist installiert. Der Login sollte im normalen Terminal geprueft werden, weil Codex/Sandbox-Zugriffe auf Token oder Keychain abweichen koennen.
+`gh` is installed. Login should be checked in a normal terminal because Codex/sandbox access to tokens or the keychain can differ.
 
 ```sh
 gh auth status
@@ -37,30 +37,30 @@ gh auth status
 
 ## Brewfile
 
-Das `Brewfile` ist die reproduzierbare Paketliste. Es sollte bewusst klein bleiben und nur Tools enthalten, die auf diesem Notebook wirklich gebraucht werden.
+The `Brewfile` is the reproducible package list. It should stay intentionally small and include only the tools that are actually useful on this notebook.
 
-## Dotfiles als Templates
+## Dotfiles as Templates
 
-Globale Konfigurationen wie Git, zsh und Aliase koennen in diesem Repo als Templates liegen. Private Werte werden ausgelagert.
+Global configuration such as Git, zsh, and aliases can live in this repo as templates. Private values are kept outside the repo.
 
-Fuer Git wird diese Struktur verwendet:
+For Git, the structure is:
 
-- `~/.gitconfig`: gemeinsame Defaults
-- `~/.gitconfig.local`: private Identitaet
+- `~/.gitconfig`: shared defaults
+- `~/.gitconfig.local`: private identity
 
-Dadurch kann die gemeinsame Konfiguration versioniert werden, ohne Name, E-Mail oder maschinenspezifische Daten fest ins Repo zu schreiben.
+This allows the shared configuration to be versioned without committing names, email addresses, or machine-specific data.
 
-Naechster Ausbau: Die Dotfiles sollen wahrscheinlich nicht nur kopiert, sondern per Symlink verwaltet werden. Der detaillierte Plan steht in [dotfiles-plan.md](dotfiles-plan.md).
+Next improvement: dotfiles should probably be managed through symlinks rather than copied. The detailed plan lives in [dotfiles-plan.md](dotfiles-plan.md).
 
-## Scope dieses Repos
+## Scope of This Repo
 
-Dieses Repo dokumentiert:
+This repo documents:
 
-- Maschinenstatus
-- Installationsschritte
-- Paketliste
-- bewusste Entscheidungen
-- naechste TODOs
-- kleine Dotfile-Templates
+- machine status
+- installation steps
+- package list
+- explicit decisions
+- next TODOs
+- small dotfile templates
 
-Es soll kein grosses Dotfiles-Framework werden, kann spaeter aber Dotfiles aufnehmen, wenn das wirklich nuetzlich wird.
+It should not become a large dotfiles framework, though it can absorb dotfiles later if that becomes useful.

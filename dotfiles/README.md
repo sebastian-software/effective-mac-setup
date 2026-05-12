@@ -1,21 +1,21 @@
 # Dotfile Templates
 
-Dieser Ordner enthaelt bewusst kleine, replizierbare Vorlagen fuer neue Macs.
+This directory contains intentionally small, reproducible templates for new Macs.
 
-Prinzip:
+Principles:
 
-- Versioniert werden Defaults, Aliase und sinnvolle Tool-Konfiguration.
-- Private Werte bleiben lokal.
-- Bestehende Dateien werden nicht automatisch ueberschrieben.
+- Version defaults, aliases, and useful tool configuration.
+- Keep private values local.
+- Do not automatically overwrite existing files.
 
 ## Git
 
-Die globale Git-Konfiguration wird in zwei Teile getrennt:
+The global Git configuration is split into two parts:
 
-- `~/.gitconfig`: versionierbare Defaults aus `templates/git/gitconfig`
-- `~/.gitconfig.local`: private Identitaet, nicht versionieren
+- `~/.gitconfig`: versioned defaults from `templates/git/gitconfig`
+- `~/.gitconfig.local`: private identity, not versioned
 
-Beispiel fuer `~/.gitconfig.local`:
+Example `~/.gitconfig.local`:
 
 ```ini
 [user]
@@ -23,13 +23,13 @@ Beispiel fuer `~/.gitconfig.local`:
   email = sebastian@example.com
 ```
 
-Anwenden:
+Apply:
 
 ```sh
 scripts/apply-dotfiles.sh
 ```
 
-Danach pruefen:
+Then verify:
 
 ```sh
 git config --global --list
@@ -37,9 +37,9 @@ git config --global --list
 
 ## Shell
 
-Die Shell-Templates sind bewusst minimal:
+The shell templates are intentionally minimal:
 
-- `templates/zsh/zprofile` laedt Homebrew.
-- `templates/zsh/zshrc` laedt fnm und starship.
+- `templates/zsh/zprofile` loads Homebrew.
+- `templates/zsh/zshrc` loads fnm and starship.
 
-Falls ein Mac bereits eigene Shell-Dateien hat, erst vergleichen und dann gezielt uebernehmen.
+If a Mac already has its own shell files, compare first and then merge intentionally.

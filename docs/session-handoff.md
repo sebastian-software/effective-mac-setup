@@ -1,8 +1,8 @@
 # Session Handoff
 
-Stand: 2026-05-12
+Date: 2026-05-12
 
-Dieses Dokument ist der Einstiegspunkt fuer eine neue Codex-Session.
+This document is the entry point for a new Codex session.
 
 ## Repo
 
@@ -11,7 +11,7 @@ Dieses Dokument ist der Einstiegspunkt fuer eine neue Codex-Session.
 https://github.com/sebastian-software/effective-mac-setup
 ```
 
-Das GitHub-Repo ist public. `main` ist gepusht.
+The GitHub repo is public. `main` is pushed.
 
 GitHub Description:
 
@@ -25,38 +25,39 @@ GitHub Topics:
 developer-setup, dotfiles, homebrew, macos, react, typescript
 ```
 
-Zusaetzliche Labels:
+Additional Labels:
 
 ```text
 setup, dotfiles, macos, typescript, automation, safe-change
 ```
 
-Letzter bekannter Commit:
+Latest known commit before this translation work:
 
 ```text
-84b22b2 chore: initialize effective mac setup
+6ce9bb5 docs: document github metadata
 ```
 
-Commit-Stil: Conventional Commits.
+Commit style: Conventional Commits.
 
-## Ziel
+## Goal
 
-Ein leichtgewichtiges, schnelles MacBook-Setup als Alternative zum Mac Studio, mit Fokus auf React/TypeScript-Entwicklung.
+A lightweight, fast MacBook setup as an alternative to the Mac Studio, focused on React/TypeScript development.
 
-Das Repo soll gleichzeitig Installationsanleitung, Statusprotokoll, Brewfile und spaeter Dotfile-Quelle sein.
+The repo should serve as installation guide, status log, Brewfile, and eventually the dotfile source of truth.
 
-## Erledigt
+## Done
 
-- Repo nach `~/Workspace/effective-mac-setup` verschoben.
-- GitHub-Repo `sebastian-software/effective-mac-setup` angelegt.
-- Initial Commit auf Conventional Commit umbenannt.
-- `fnm` via Homebrew installiert.
-- Node.js LTS 24.15.0 via `fnm` installiert.
-- Corepack aktiviert.
-- `pnpm` initialisiert.
-- `gh auth status` im normalen Kontext erfolgreich verifiziert.
-- SSH-Setup bewusst als 1Password SSH Agent dokumentiert.
-- Erste Doku-Struktur angelegt:
+- Moved the repo to `~/Workspace/effective-mac-setup`.
+- Created GitHub repo `sebastian-software/effective-mac-setup`.
+- Made the GitHub repo public.
+- Renamed the initial commit to a Conventional Commit.
+- Installed `fnm` via Homebrew.
+- Installed Node.js LTS 24.15.0 via `fnm`.
+- Enabled Corepack.
+- Initialized `pnpm`.
+- Verified `gh auth status` in a normal terminal context.
+- Documented SSH setup as intentionally using the 1Password SSH Agent.
+- Created the initial documentation structure:
   - `README.md`
   - `Brewfile`
   - `docs/status.md`
@@ -64,11 +65,11 @@ Das Repo soll gleichzeitig Installationsanleitung, Statusprotokoll, Brewfile und
   - `docs/decisions.md`
   - `docs/dotfiles-plan.md`
 
-## Offene Hauptidee
+## Main Open Idea
 
-Dotfiles sollen wahrscheinlich nicht nur kopiert werden, sondern per Symlink aus diesem Repo verwaltet werden.
+Dotfiles should probably not be copied. They should be managed as symlinks from this repo.
 
-Geplantes Modell:
+Planned model:
 
 ```text
 ~/.gitconfig -> repo/dotfiles/managed/gitconfig
@@ -80,14 +81,14 @@ Geplantes Modell:
 ~/.zprofile.local
 ```
 
-Die `.local` Dateien bleiben privat und maschinenspezifisch.
+The `.local` files stay private and machine-specific.
 
-## Naechster sinnvoller Arbeitsblock
+## Next Useful Work Block
 
-1. `dotfiles/templates` nach `dotfiles/managed` und `dotfiles/examples` umbauen.
-2. TypeScript-Tooling fuer das Repo hinzufuegen.
-3. `scripts/dotfiles.ts` implementieren.
-4. CLI-Kommandos bereitstellen:
+1. Reorganize `dotfiles/templates` into `dotfiles/managed` and `dotfiles/examples`.
+2. Add TypeScript tooling for the repo.
+3. Implement `scripts/dotfiles.ts`.
+4. Provide CLI commands:
 
 ```sh
 pnpm dotfiles:check
@@ -95,46 +96,46 @@ pnpm dotfiles:apply
 pnpm dotfiles:repair
 ```
 
-5. Erst nur `check` implementieren und ausfuehren.
-6. Dann `apply` mit sicherem Verhalten.
-7. Danach `repair` mit Backups.
+5. Implement and run `check` first.
+6. Then implement safe `apply` behavior.
+7. Afterwards implement `repair` with backups.
 
 Details: [dotfiles-plan.md](dotfiles-plan.md)
 
-## Sicherheitsregeln fuer Dotfiles
+## Safety Rules for Dotfiles
 
-- Keine echte Datei ueberschreiben.
-- Vor Veraenderungen Backup anlegen.
-- Private `.local` Dateien nie ins Repo kopieren.
-- Symlink-Ziele muessen innerhalb dieses Repos liegen.
-- `check` muss immer ohne Schreibzugriff funktionieren.
-- `apply` darf nur fehlende Dinge anlegen.
-- `repair` darf bestehende Dateien nur nach Backup ersetzen.
+- Do not overwrite real files.
+- Create backups before changes.
+- Never copy private `.local` files back into the repo.
+- Symlink targets must point inside this repo.
+- `check` must always work without write access.
+- `apply` may only create missing things.
+- `repair` may replace existing files only after creating a backup.
 
-## Noch offen im Mac-Setup
+## Still Open in the Mac Setup
 
-- Git-Identitaet final in `~/.gitconfig.local` setzen.
-- 1Password SSH Agent mit GitHub pruefen:
+- Set final Git identity in `~/.gitconfig.local`.
+- Verify the 1Password SSH Agent with GitHub:
 
 ```sh
 ssh -T git@github.com
 ```
 
-- `brew bundle --file Brewfile` ausfuehren.
-- Editor-Entscheidung finalisieren: VS Code, Cursor oder beide.
-- Browser installieren/pruefen: Chrome, Firefox, Safari.
-- OrbStack nur installieren, wenn Container/Docker lokal wirklich gebraucht werden.
-- Vite React/TypeScript Smoke-Test dokumentieren.
-- Next.js App Router Smoke-Test dokumentieren.
+- Run `brew bundle --file Brewfile`.
+- Finalize editor decision: VS Code, Cursor, or both.
+- Install/check browsers: Chrome, Firefox, Safari.
+- Install OrbStack only if local Docker/container workflows are actually needed.
+- Document a Vite React/TypeScript smoke test.
+- Document a Next.js App Router smoke test.
 
-## Wichtige Konventionen
+## Important Conventions
 
-- Sprache der Doku: Deutsch, aber technische Begriffe pragmatisch Englisch.
-- Dateien bisher ASCII-only.
-- Commit-Messages: Conventional Commits.
-- Repo soll schlank bleiben, kein grosses Dotfiles-Framework werden.
+- Documentation language: English.
+- Files should stay ASCII-only unless there is a clear reason otherwise.
+- Commit messages: Conventional Commits.
+- The repo should stay lean, not become a large dotfiles framework.
 
-## Empfohlener Start in neuer Session
+## Recommended Start in a New Session
 
 ```sh
 cd ~/Workspace/effective-mac-setup
@@ -143,4 +144,4 @@ git pull --ff-only
 sed -n '1,220p' docs/session-handoff.md
 ```
 
-Dann mit dem TypeScript-Dotfile-Manager beginnen.
+Then start with the TypeScript dotfile manager.
