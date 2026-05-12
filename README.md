@@ -95,6 +95,10 @@ gh auth login
 
 Die priorisierte Liste steht in [docs/todo.md](docs/todo.md).
 
+Fuer den Start in einer neuen Codex-Session gibt es ein kompaktes Handoff:
+
+[docs/session-handoff.md](docs/session-handoff.md)
+
 ## Dotfiles
 
 Wiederverwendbare Vorlagen fuer Git und Shell liegen in [dotfiles/](dotfiles/).

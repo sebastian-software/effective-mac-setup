@@ -2,6 +2,13 @@
 
 Priorisierte Liste fuer das React/TypeScript-Notebook.
 
+## Neue Session
+
+- [ ] Einstieg ueber [session-handoff.md](session-handoff.md) lesen.
+- [ ] Repo-Status pruefen:
+  - `git status --short --branch`
+  - `git pull --ff-only`
+
 ## Erledigt
 
 - [x] macOS-Version und Architektur geprueft.
