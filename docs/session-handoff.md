@@ -13,6 +13,24 @@ https://github.com/sebastian-software/effective-mac-setup
 
 Das GitHub-Repo ist public. `main` ist gepusht.
 
+GitHub Description:
+
+```text
+Effective macOS setup for a lightweight React and TypeScript development environment.
+```
+
+GitHub Topics:
+
+```text
+developer-setup, dotfiles, homebrew, macos, react, typescript
+```
+
+Zusaetzliche Labels:
+
+```text
+setup, dotfiles, macos, typescript, automation, safe-change
+```
+
 Letzter bekannter Commit:
 
 ```text
