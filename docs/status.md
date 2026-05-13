@@ -1,6 +1,6 @@
 # Status
 
-Date: 2026-05-12
+Date: 2026-05-13
 
 ## System
 
@@ -16,9 +16,9 @@ Date: 2026-05-12
 
 | Tool | Status |
 | --- | --- |
-| Git | Apple Git 2.50.1 available; Homebrew Git is listed in the Brewfile |
-| Git user.name | Still open |
-| Git user.email | Still open |
+| Git | Homebrew Git 2.54.0 installed |
+| Git user.name | `Sebastian Werner` through `~/.gitconfig.local` |
+| Git user.email | `swernerx@users.noreply.github.com` through `~/.gitconfig.local` |
 | GitHub CLI | 2.92.0 installed |
 | GitHub Login | Verified in a normal terminal: account `swernerx`, SSH protocol, token in the keyring. |
 | SSH Agent | Intentionally handled by the 1Password SSH Agent; not meaningful to verify from the Codex sandbox. |
@@ -27,8 +27,10 @@ Date: 2026-05-12
 | npm | 11.12.1 |
 | Corepack | 0.34.6 |
 | pnpm | 11.1.1 |
-| Go | Planned in Brewfile; not yet verified |
-| Rust | Planned in Brewfile; not yet verified |
+| Go | 1.26.3 installed |
+| Rust | rustup 1.29.0 with rustc/cargo 1.95.0 stable installed |
+| chezmoi | 2.70.3 installed and configured in symlink mode |
+| mas | 7.0.0 installed; `mas config` works, `mas list` hung during train-network setup |
 
 ## Apps Found
 
@@ -36,6 +38,9 @@ Date: 2026-05-12
 - Backblaze
 - Codex
 - Fantastical
+- Firefox
+- GitHub Desktop
+- Google Chrome (installed, but intentionally not tracked in the Brewfile yet)
 - Lungo
 - Microsoft Office apps
 - Pure Paste
@@ -46,17 +51,46 @@ Date: 2026-05-12
 
 ## Changes Already Made
 
-`~/.zshrc` was extended for fnm:
+Homebrew Bundle has installed the curated Brewfile. The deprecated `tap "homebrew/bundle"` entry was removed because the tap is now empty/deprecated.
 
-```sh
-# Node.js version manager
-eval "$(fnm env --use-on-cd --shell zsh)"
+`chezmoi` is configured locally:
+
+```toml
+sourceDir = "/Users/sebastian/Workspace/effective-mac-setup/dotfiles/chezmoi"
+mode = "symlink"
 ```
 
-`~/.zprofile` already contained the Homebrew shellenv setup:
+Managed home files are symlinks into this repo:
+
+```text
+~/.gitconfig
+~/.gitignore_global
+~/.zprofile
+~/.zshrc
+```
+
+Private local files stay outside the repo:
+
+```text
+~/.gitconfig.local
+~/.zprofile.local
+~/.zshrc.local
+```
+
+`~/.zshrc` loads fnm, starship, Cargo when available, and `~/.zshrc.local`:
+
+```sh
+eval "$(fnm env --use-on-cd --shell zsh)"
+eval "$(starship init zsh)"
+[[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+```
+
+`~/.zprofile` loads Homebrew and `~/.zprofile.local`:
 
 ```sh
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+[[ -f "$HOME/.zprofile.local" ]] && source "$HOME/.zprofile.local"
 ```
 
 ## Repo

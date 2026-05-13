@@ -11,7 +11,7 @@ This document is the entry point for a new Codex session.
 https://github.com/sebastian-software/effective-mac-setup
 ```
 
-The GitHub repo is public. `main` is pushed.
+The GitHub repo is public. `main` was pushed before the first setup implementation.
 
 GitHub Description:
 
@@ -57,6 +57,13 @@ The repo should serve as installation guide, status log, Brewfile, and eventuall
 - Initialized `pnpm`.
 - Verified `gh auth status` in a normal terminal context.
 - Documented SSH setup as intentionally using the 1Password SSH Agent.
+- Installed the curated Brewfile.
+- Removed the deprecated `tap "homebrew/bundle"` entry.
+- Installed and configured `chezmoi` in symlink mode.
+- Migrated Git and zsh dotfiles into `dotfiles/chezmoi`.
+- Set Git identity in `~/.gitconfig.local`.
+- Installed Go and Rust toolchains.
+- Installed Firefox and GitHub Desktop through Homebrew Casks.
 - Created the initial documentation structure:
   - `README.md`
   - `Brewfile`
@@ -65,9 +72,16 @@ The repo should serve as installation guide, status log, Brewfile, and eventuall
   - `docs/decisions.md`
   - `docs/dotfiles-plan.md`
 
-## Main Open Idea
+## Dotfiles
 
-Dotfiles should be managed with `chezmoi` rather than a custom TypeScript manager.
+Dotfiles are managed with `chezmoi` in symlink mode.
+
+Local config:
+
+```toml
+sourceDir = "/Users/sebastian/Workspace/effective-mac-setup/dotfiles/chezmoi"
+mode = "symlink"
+```
 
 Current public/shared files should continue to load private local files:
 
@@ -81,11 +95,11 @@ The `.local` files stay private and machine-specific. Do not commit them.
 
 ## Next Useful Work Block
 
-1. Install the curated Brewfile when ready.
-2. Initialize `chezmoi`.
-3. Add Git and zsh dotfiles one by one.
-4. Run `chezmoi diff` before applying anything.
-5. Keep private `.local` files outside the repo.
+1. Re-run `mas list` on a stable connection and review App Store entries.
+2. Decide whether Chrome should stay untracked or become a tracked fallback Cask.
+3. Verify the 1Password SSH Agent with GitHub in a normal terminal.
+4. Decide on the editor: VS Code, Cursor, or both.
+5. Start the Vite React/TypeScript smoke test.
 
 Details: [dotfiles-plan.md](dotfiles-plan.md)
 
@@ -105,7 +119,7 @@ Details: [dotfiles-plan.md](dotfiles-plan.md)
 ssh -T git@github.com
 ```
 
-- Run `brew bundle --file Brewfile` to install the remaining CLI tools, Go/Rust tooling, and apps.
+- Add reviewed Mac App Store apps through `mas` entries.
 - Finalize editor decision: VS Code, Cursor, or both.
 - Install/check browsers: Chrome, Firefox, Safari.
 - Install OrbStack only if local Docker/container workflows are actually needed.
@@ -129,4 +143,4 @@ git pull --ff-only
 sed -n '1,220p' docs/session-handoff.md
 ```
 
-Then start with the `chezmoi` dotfile migration.
+Then start with MAS inventory review or the Vite React/TypeScript smoke test.

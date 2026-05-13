@@ -124,3 +124,5 @@ scripts/apply-dotfiles.sh
 ```
 
 The migration plan lives in [docs/dotfiles-plan.md](docs/dotfiles-plan.md).
+
+Current `chezmoi` source files live in `dotfiles/chezmoi/`, and the local `chezmoi` config points there in symlink mode.

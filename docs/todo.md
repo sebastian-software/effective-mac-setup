@@ -27,18 +27,19 @@ Prioritized list for the macOS developer setup.
 - [x] Evaluate `chezmoi` for dotfile management:
   - `docs/dotfiles-plan.md`
 - [x] Moved the repo to a stable path: `~/Workspace/effective-mac-setup`.
-- [ ] Install and initialize `chezmoi`.
-- [ ] Migrate Git and zsh dotfiles into `chezmoi` one by one.
-- [ ] Set Git identity in `~/.gitconfig.local`:
+- [x] Install and initialize `chezmoi`.
+- [x] Migrate Git and zsh dotfiles into `chezmoi` one by one.
+- [x] Set Git identity in `~/.gitconfig.local`:
   - `git config --global user.name "Your Name"`
   - `git config --global user.email "your@email"`
 - [x] Verified GitHub CLI in a normal terminal:
   - `gh auth status`
 - [ ] Verify the 1Password SSH Agent in a normal terminal:
   - `ssh -T git@github.com`
-- [ ] Run `brew bundle --file Brewfile` to install missing CLI tools, Go/Rust tooling, and apps.
-- [ ] Add reviewed Mac App Store apps through `mas` entries.
-- [ ] Open a new terminal and verify the Node setup:
+- [x] Run `brew bundle --file Brewfile` to install missing CLI tools, Go/Rust tooling, and apps.
+- [ ] Add reviewed Mac App Store apps through `mas` entries:
+  - `docs/mas-inventory.md`
+- [x] Open a new terminal and verify the Node setup:
   - `node --version`
   - `npm --version`
   - `pnpm --version`
@@ -61,7 +62,7 @@ Prioritized list for the macOS developer setup.
 
 - [ ] Evaluate Helium as the daily browser.
 - [ ] Install Chrome only if a fallback Chromium browser is needed.
-- [ ] Install Firefox.
+- [x] Install Firefox.
 - [ ] Use Safari for WebKit checks.
 - [ ] Install OrbStack if Docker/containers are actually needed.
 
@@ -69,9 +70,9 @@ Prioritized list for the macOS developer setup.
 
 - [ ] Create a Vite React/TypeScript smoke test.
 - [ ] Create a Next.js App Router smoke test.
-- [ ] Verify Go toolchain:
+- [x] Verify Go toolchain:
   - `go version`
-- [ ] Verify Rust toolchain:
+- [x] Verify Rust toolchain:
   - `rustc --version`
   - `cargo --version`
 - [ ] Document shared project standards:

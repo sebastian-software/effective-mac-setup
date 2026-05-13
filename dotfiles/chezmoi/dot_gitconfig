@@ -1,0 +1,26 @@
+[include]
+  path = ~/.gitconfig.local
+
+[init]
+  defaultBranch = main
+
+[pull]
+  rebase = false
+
+[push]
+  autoSetupRemote = true
+
+[fetch]
+  prune = true
+
+[rerere]
+  enabled = true
+
+[core]
+  excludesfile = ~/.gitignore_global
+
+[branch]
+  sort = -committerdate
+
+[tag]
+  sort = version:refname

@@ -128,8 +128,37 @@ chezmoi apply
 - Should `chezmoi` use plain files first, or templates immediately?
 - Should 1Password integration be used later for private values, or should `.local` files remain purely local?
 
+## Implemented State
+
+`chezmoi` is installed and configured in symlink mode:
+
+```toml
+sourceDir = "/Users/sebastian/Workspace/effective-mac-setup/dotfiles/chezmoi"
+mode = "symlink"
+```
+
+Managed source files:
+
+```text
+dotfiles/chezmoi/dot_gitconfig
+dotfiles/chezmoi/dot_gitignore_global
+dotfiles/chezmoi/dot_zprofile
+dotfiles/chezmoi/dot_zshrc
+```
+
+Managed targets:
+
+```text
+~/.gitconfig
+~/.gitignore_global
+~/.zprofile
+~/.zshrc
+```
+
+`chezmoi status` and `chezmoi diff` should be empty after apply.
+
 ## Decision
 
-Adopt `chezmoi` as the dotfile manager candidate and add it to the Brewfile.
+Adopt `chezmoi` as the dotfile manager and keep it in the Brewfile.
 
 Do not implement the custom TypeScript dotfile manager unless `chezmoi` proves too heavy or mismatched in practice.
