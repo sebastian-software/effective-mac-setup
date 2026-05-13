@@ -17,6 +17,7 @@ brew "go"
 brew "rustup-init"
 
 # GUI apps.
+cask "github"
 cask "firefox"
 
 # Browser fallback. Prefer Helium for day-to-day browsing if it keeps working well.
