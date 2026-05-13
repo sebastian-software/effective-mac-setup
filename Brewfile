@@ -10,22 +10,20 @@ brew "fd"
 brew "jq"
 brew "bat"
 brew "eza"
-brew "tree"
-brew "direnv"
+brew "mas"
 
-# Common infrastructure/tooling languages
+# Common infrastructure/tooling languages, also useful for OSS projects.
 brew "go"
 brew "rustup-init"
 
-# Optional but useful for local web development
-brew "watchman"
-
-# GUI apps
-cask "visual-studio-code"
-cask "google-chrome"
+# GUI apps.
 cask "firefox"
-cask "orbstack"
 
-# Optional API/database tools. Uncomment if wanted.
-# cask "bruno"
-# cask "tableplus"
+# Browser fallback. Prefer Helium for day-to-day browsing if it keeps working well.
+# cask "google-chrome"
+
+# Editor decision is still open.
+# cask "visual-studio-code"
+
+# Mac App Store apps can be tracked here once reviewed.
+# mas "Example App", id: 123456789

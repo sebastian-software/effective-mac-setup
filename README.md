@@ -94,6 +94,12 @@ gh auth login
 - Linting/formatting: ESLint + Prettier
 - Infrastructure-adjacent tooling: Go and Rust via Homebrew/rustup as needed
 
+## Package Management
+
+The `Brewfile` is curated before installation. It includes the approved baseline tools, Go/Rust for OSS work such as Ferrocat, Firefox, and `mas` so Mac App Store apps can be added later as reproducible entries.
+
+Chrome, VS Code, container tooling, API clients, and database GUIs are intentionally left commented out until they are explicitly needed.
+
 ## Next Steps
 
 The prioritized list lives in [docs/todo.md](docs/todo.md).

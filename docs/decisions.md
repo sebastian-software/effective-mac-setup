@@ -39,9 +39,32 @@ gh auth status
 
 The `Brewfile` is the reproducible package list. It should stay intentionally small and include only the tools that are actually useful on a lean macOS developer machine.
 
+Current baseline:
+
+- Core developer tools: Git, GitHub CLI, fnm, starship, ripgrep, fd.
+- Useful terminal helpers: jq, bat, eza.
+- Mac App Store tracking through `mas`.
+- Firefox as the default reproducible browser install; Chrome stays commented as a fallback while Helium is evaluated.
+
+Removed or deferred for now:
+
+- `tree`, `direnv`, `watchman`.
+- OrbStack, Bruno, TablePlus.
+- VS Code until the editor decision is final.
+
 ## Go and Rust
 
-Go and Rust are included because they commonly appear next to modern frontend work in infrastructure, CLIs, build tooling, developer platforms, and edge/runtime ecosystems. They should be available without turning this setup into a heavy backend workstation.
+Go and Rust are included because they commonly appear next to modern frontend work in infrastructure, CLIs, build tooling, developer platforms, edge/runtime ecosystems, and personal OSS projects such as Ferrocat. They should be available without turning this setup into a heavy backend workstation.
+
+## Mac App Store Apps
+
+Mac App Store apps should be tracked through Homebrew Bundle using `mas` entries once reviewed. This keeps App Store apps reinstallable without requiring a separate package list.
+
+Example:
+
+```ruby
+mas "Xcode", id: 497799835
+```
 
 ## Dotfiles as Templates
 

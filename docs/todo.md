@@ -14,6 +14,7 @@ Prioritized list for the macOS developer setup.
 - [x] Checked macOS version and architecture.
 - [x] Checked Xcode Command Line Tools.
 - [x] Checked Homebrew.
+- [x] Reviewed and trimmed the initial Brewfile.
 - [x] Installed `fnm` via Homebrew.
 - [x] Extended `~/.zshrc` for `fnm`.
 - [x] Installed Node.js LTS 24.15.0 via `fnm`.
@@ -38,6 +39,7 @@ Prioritized list for the macOS developer setup.
 - [ ] Verify the 1Password SSH Agent in a normal terminal:
   - `ssh -T git@github.com`
 - [ ] Run `brew bundle --file Brewfile` to install missing CLI tools, Go/Rust tooling, and apps.
+- [ ] Add reviewed Mac App Store apps through `mas` entries.
 - [ ] Open a new terminal and verify the Node setup:
   - `node --version`
   - `npm --version`
@@ -59,7 +61,8 @@ Prioritized list for the macOS developer setup.
 
 ## Browsers and Runtime
 
-- [ ] Install Chrome.
+- [ ] Evaluate Helium as the daily browser.
+- [ ] Install Chrome only if a fallback Chromium browser is needed.
 - [ ] Install Firefox.
 - [ ] Use Safari for WebKit checks.
 - [ ] Install OrbStack if Docker/containers are actually needed.
@@ -95,5 +98,5 @@ Prioritized list for the macOS developer setup.
 
 - [ ] Enable `direnv` for project-specific environments.
 - [ ] Create a separate dotfiles repo or extend this repo for that purpose.
-- [ ] Trim the Brewfile to personal preferences.
+- [x] Trim the Brewfile to personal preferences.
 - [ ] Document a CI check for an example project.
