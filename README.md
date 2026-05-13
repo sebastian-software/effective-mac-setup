@@ -96,7 +96,7 @@ gh auth login
 
 ## Package Management
 
-The `Brewfile` is curated before installation. It includes the approved baseline tools, Go/Rust for OSS work such as Ferrocat, Firefox, and `mas` so Mac App Store apps can be added later as reproducible entries.
+The `Brewfile` is curated before installation. It includes the approved baseline tools, `chezmoi` for dotfile management, Go/Rust for OSS work such as Ferrocat, Firefox, GitHub Desktop, and `mas` so Mac App Store apps can be added later as reproducible entries.
 
 Chrome, VS Code, container tooling, API clients, and database GUIs are intentionally left commented out until they are explicitly needed.
 
@@ -112,13 +112,15 @@ For starting a new Codex session, use the compact handoff:
 
 Reusable Git and shell templates live in [dotfiles/](dotfiles/).
 
-The Git configuration is intentionally split into two parts:
+Dotfile management should use `chezmoi` instead of a custom script. The Git configuration is intentionally split into two parts:
 
 - Versioned defaults: `dotfiles/templates/git/gitconfig`
 - Private identity: `~/.gitconfig.local`
 
-Apply them with:
+The current templates can still be applied manually while the `chezmoi` migration is prepared:
 
 ```sh
 scripts/apply-dotfiles.sh
 ```
+
+The migration plan lives in [docs/dotfiles-plan.md](docs/dotfiles-plan.md).

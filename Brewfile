@@ -11,6 +11,7 @@ brew "jq"
 brew "bat"
 brew "eza"
 brew "mas"
+brew "chezmoi"
 
 # Common infrastructure/tooling languages, also useful for OSS projects.
 brew "go"

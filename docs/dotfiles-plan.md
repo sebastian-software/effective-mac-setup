@@ -1,173 +1,135 @@
 # Dotfiles Plan
 
-Goal: this repo becomes the source of truth for shared dotfiles. Private or machine-specific values stay in `.local` files outside the repo.
+Goal: this repo should become the source of truth for shared dotfiles while keeping private and machine-specific values outside the public repository.
 
-## Core Model
+## Recommendation
 
-Hybrid model using symlinks plus local extensions:
+Use `chezmoi` instead of building a custom TypeScript dotfile manager.
 
-```text
-~/.gitconfig -> <repo>/dotfiles/managed/gitconfig
-~/.zshrc     -> <repo>/dotfiles/managed/zshrc
-~/.zprofile  -> <repo>/dotfiles/managed/zprofile
+`chezmoi` already solves the hard parts that were planned for a custom script:
 
-~/.gitconfig.local  # private, not versioned
-~/.zshrc.local      # private, not versioned
-~/.zprofile.local   # private, not versioned
+- track dotfiles in a source directory
+- preview changes before applying them
+- apply dotfiles safely across machines
+- support machine-specific templates
+- keep secrets out of the public repo
+- run setup scripts when needed
+- integrate with password managers and encryption workflows later
+
+This keeps the repository lean and avoids maintaining our own dotfile framework.
+
+## Why Not Build Our Own Manager?
+
+The previous plan proposed a TypeScript CLI with:
+
+- `pnpm dotfiles:check`
+- `pnpm dotfiles:apply`
+- `pnpm dotfiles:repair`
+
+That would work, but most of the complexity is not specific to this setup:
+
+- detecting files vs symlinks
+- handling broken or wrong links
+- showing diffs
+- backing up existing files
+- applying changes idempotently
+- supporting machine-specific variations
+- avoiding accidental leakage of private values
+
+Those are exactly the long-lived edge cases a dedicated dotfile manager should own.
+
+## Proposed Model
+
+Use Homebrew Bundle for installing `chezmoi`:
+
+```ruby
+brew "chezmoi"
 ```
 
-The versioned files load local extensions:
+Use this repo as the user-facing setup repository. Dotfiles can either stay inside this repo or move into a dedicated dotfiles repo later if the setup grows.
 
-```ini
-# gitconfig
-[include]
-  path = ~/.gitconfig.local
-```
-
-```sh
-# zshrc
-[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
-```
-
-## Why Symlinks?
-
-- Dotfile changes are immediately visible in the repo.
-- New Macs can be brought to the same state with one command.
-- The setup stays transparent: `ls -la ~/.zshrc` clearly points to this repo.
-
-## Why `.local` Files?
-
-- Name, email, private aliases, tokens, and machine-specific paths stay outside the repo.
-- Different Macs can have small differences without forking the dotfiles.
-- The repo stays shareable/public.
-
-## Why TypeScript Instead of Bash?
-
-A dotfile manager gets complex quickly:
-
-- detect existing files
-- distinguish real files from symlinks
-- repair broken symlinks
-- create timestamped backups
-- support check mode without writes
-- print clear diff/status output
-- collect and report errors clearly
-
-TypeScript makes this logic more robust and testable than a growing Bash script.
-
-## Proposed Structure
+For now, keep the scope small:
 
 ```text
 dotfiles/
-  managed/
-    gitconfig
-    gitignore_global
-    zprofile
-    zshrc
-  examples/
-    gitconfig.local
-    zshrc.local
-    zprofile.local
-
-scripts/
-  dotfiles.ts
-
-package.json
-tsconfig.json
+  templates/
+    git/
+    zsh/
 ```
 
-## Dotfile Manifest
-
-Managed links should not be scattered through the code. They should live in a manifest:
-
-```ts
-const links = [
-  {
-    name: "gitconfig",
-    source: "dotfiles/managed/gitconfig",
-    target: "~/.gitconfig",
-    localExample: "dotfiles/examples/gitconfig.local",
-    localTarget: "~/.gitconfig.local",
-  },
-  {
-    name: "zshrc",
-    source: "dotfiles/managed/zshrc",
-    target: "~/.zshrc",
-    localExample: "dotfiles/examples/zshrc.local",
-    localTarget: "~/.zshrc.local",
-  },
-];
-```
-
-## CLI Behavior
-
-```sh
-pnpm dotfiles:check
-pnpm dotfiles:apply
-pnpm dotfiles:repair
-```
-
-### `check`
-
-Read-only; changes nothing.
-
-Output per file:
-
-- `linked`: target points correctly into the repo
-- `missing`: target is missing
-- `file`: target is a real file
-- `wrong-link`: target is a symlink, but points elsewhere
-- `broken-link`: target is a broken symlink
-- `local-missing`: `.local` file is missing
-
-### `apply`
-
-Safe default mode:
-
-- missing targets are linked
-- missing `.local` files are created from examples
-- existing real files are not overwritten
-- conflicts are reported
-
-### `repair`
-
-Active repair mode:
-
-- wrong or broken symlinks are replaced
-- existing real files are backed up with a timestamp
-- the correct symlink is set afterwards
-
-Backup format:
+Then migrate into `chezmoi` deliberately:
 
 ```text
-~/.zshrc.backup-20260512-163000
+~/.local/share/chezmoi/
+  dot_gitconfig
+  dot_gitignore_global
+  dot_zprofile
+  dot_zshrc
 ```
+
+Private values should remain local:
+
+```text
+~/.gitconfig.local
+~/.zshrc.local
+~/.zprofile.local
+```
+
+The managed files should continue to load those local files.
 
 ## Safety Rules
 
-- Do not delete files.
-- Do not overwrite real files.
-- Always create a backup before replacing anything.
-- Symlink targets must point inside this repo.
-- Private `.local` files are never copied back into the repo.
+- Do not overwrite existing home-directory files without reviewing `chezmoi diff`.
+- Do not commit private `.local` files.
+- Keep Git identity, private aliases, tokens, hostnames, and machine-specific paths outside the repo.
+- Prefer `chezmoi diff` before `chezmoi apply`.
+- Prefer small migrations over importing a whole home directory.
 
-## Implementation Steps
+## Initial Workflow
 
-1. Reorganize the current `dotfiles/templates` into `dotfiles/managed` and `dotfiles/examples`.
-2. Add `package.json` with `tsx` or a direct Node TypeScript runner.
-3. Implement `scripts/dotfiles.ts` with the manifest and `check`.
-4. Implement `apply`.
-5. Implement `repair`.
-6. Update README and TODO.
-7. Run `pnpm dotfiles:check` first, then inspect manually.
-8. Run `pnpm dotfiles:apply` afterwards.
+Install:
 
-## Open Decision
-
-The repo has already been moved to a stable location:
-
-```text
-~/Workspace/effective-mac-setup
+```sh
+brew bundle --file Brewfile
 ```
 
-This path is suitable for symlink-managed dotfiles.
+Inspect current state:
+
+```sh
+chezmoi doctor
+chezmoi status
+```
+
+Initialize dotfile management when ready:
+
+```sh
+chezmoi init
+```
+
+Add files one by one:
+
+```sh
+chezmoi add ~/.gitconfig
+chezmoi add ~/.gitignore_global
+chezmoi add ~/.zprofile
+chezmoi add ~/.zshrc
+```
+
+Review before applying:
+
+```sh
+chezmoi diff
+chezmoi apply
+```
+
+## Open Questions
+
+- Should dotfiles live in this setup repo or in a separate dotfiles repo?
+- Should `chezmoi` use plain files first, or templates immediately?
+- Should 1Password integration be used later for private values, or should `.local` files remain purely local?
+
+## Decision
+
+Adopt `chezmoi` as the dotfile manager candidate and add it to the Brewfile.
+
+Do not implement the custom TypeScript dotfile manager unless `chezmoi` proves too heavy or mismatched in practice.

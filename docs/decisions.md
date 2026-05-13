@@ -43,8 +43,9 @@ Current baseline:
 
 - Core developer tools: Git, GitHub CLI, fnm, starship, ripgrep, fd.
 - Useful terminal helpers: jq, bat, eza.
+- Dotfile management through `chezmoi`.
 - Mac App Store tracking through `mas`.
-- Firefox as the default reproducible browser install; Chrome stays commented as a fallback while Helium is evaluated.
+- GitHub Desktop and Firefox as reproducible GUI installs; Chrome stays commented as a fallback while Helium is evaluated.
 
 Removed or deferred for now:
 
@@ -77,7 +78,7 @@ For Git, the structure is:
 
 This allows the shared configuration to be versioned without committing names, email addresses, or machine-specific data.
 
-Next improvement: dotfiles should probably be managed through symlinks rather than copied. The detailed plan lives in [dotfiles-plan.md](dotfiles-plan.md).
+Dotfiles should be managed with `chezmoi` rather than a custom TypeScript manager. This avoids maintaining local logic for diffing, applying, backups, templates, and machine-specific state. The detailed plan lives in [dotfiles-plan.md](dotfiles-plan.md).
 
 ## Scope of This Repo
 

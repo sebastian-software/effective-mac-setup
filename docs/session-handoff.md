@@ -67,50 +67,34 @@ The repo should serve as installation guide, status log, Brewfile, and eventuall
 
 ## Main Open Idea
 
-Dotfiles should probably not be copied. They should be managed as symlinks from this repo.
+Dotfiles should be managed with `chezmoi` rather than a custom TypeScript manager.
 
-Planned model:
+Current public/shared files should continue to load private local files:
 
 ```text
-~/.gitconfig -> repo/dotfiles/managed/gitconfig
-~/.zshrc     -> repo/dotfiles/managed/zshrc
-~/.zprofile  -> repo/dotfiles/managed/zprofile
-
 ~/.gitconfig.local
 ~/.zshrc.local
 ~/.zprofile.local
 ```
 
-The `.local` files stay private and machine-specific.
+The `.local` files stay private and machine-specific. Do not commit them.
 
 ## Next Useful Work Block
 
-1. Reorganize `dotfiles/templates` into `dotfiles/managed` and `dotfiles/examples`.
-2. Add TypeScript tooling for the repo.
-3. Implement `scripts/dotfiles.ts`.
-4. Provide CLI commands:
-
-```sh
-pnpm dotfiles:check
-pnpm dotfiles:apply
-pnpm dotfiles:repair
-```
-
-5. Implement and run `check` first.
-6. Then implement safe `apply` behavior.
-7. Afterwards implement `repair` with backups.
+1. Install the curated Brewfile when ready.
+2. Initialize `chezmoi`.
+3. Add Git and zsh dotfiles one by one.
+4. Run `chezmoi diff` before applying anything.
+5. Keep private `.local` files outside the repo.
 
 Details: [dotfiles-plan.md](dotfiles-plan.md)
 
 ## Safety Rules for Dotfiles
 
 - Do not overwrite real files.
-- Create backups before changes.
 - Never copy private `.local` files back into the repo.
-- Symlink targets must point inside this repo.
-- `check` must always work without write access.
-- `apply` may only create missing things.
-- `repair` may replace existing files only after creating a backup.
+- Review `chezmoi diff` before applying changes.
+- Prefer small, explicit migrations over importing many files at once.
 
 ## Still Open in the Mac Setup
 
@@ -145,4 +129,4 @@ git pull --ff-only
 sed -n '1,220p' docs/session-handoff.md
 ```
 
-Then start with the TypeScript dotfile manager.
+Then start with the `chezmoi` dotfile migration.

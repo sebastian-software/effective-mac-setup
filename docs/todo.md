@@ -24,13 +24,11 @@ Prioritized list for the macOS developer setup.
 
 ## Next
 
-- [ ] Finalize the dotfile symlink concept:
+- [x] Evaluate `chezmoi` for dotfile management:
   - `docs/dotfiles-plan.md`
 - [x] Moved the repo to a stable path: `~/Workspace/effective-mac-setup`.
-- [ ] Implement the TypeScript dotfile manager:
-  - `pnpm dotfiles:check`
-  - `pnpm dotfiles:apply`
-  - `pnpm dotfiles:repair`
+- [ ] Install and initialize `chezmoi`.
+- [ ] Migrate Git and zsh dotfiles into `chezmoi` one by one.
 - [ ] Set Git identity in `~/.gitconfig.local`:
   - `git config --global user.name "Your Name"`
   - `git config --global user.email "your@email"`
