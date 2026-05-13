@@ -45,13 +45,13 @@ Current baseline:
 - Useful terminal helpers: jq, bat, eza.
 - Dotfile management through `chezmoi`.
 - Mac App Store tracking through `mas`.
-- GitHub Desktop and Firefox as reproducible GUI installs; Chrome stays commented as a fallback while Helium is evaluated.
+- GitHub Desktop, Zed, and Firefox as reproducible GUI installs; Chrome stays commented as a fallback while Helium is evaluated.
 
 Removed or deferred for now:
 
 - `tree`, `direnv`, `watchman`.
 - OrbStack, Bruno, TablePlus.
-- VS Code until the editor decision is final.
+- VS Code until an editor fallback is needed.
 
 ## Go and Rust
 

@@ -40,6 +40,7 @@ Date: 2026-05-13
 - Fantastical
 - Firefox
 - GitHub Desktop
+- Zed 1.1.8
 - Google Chrome (installed, but intentionally not tracked in the Brewfile yet)
 - Lungo
 - Microsoft Office apps

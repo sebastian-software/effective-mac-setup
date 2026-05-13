@@ -17,12 +17,13 @@ brew "rustup-init"
 
 # GUI apps.
 cask "github"
+cask "zed"
 cask "firefox"
 
 # Browser fallback. Prefer Helium for day-to-day browsing if it keeps working well.
 # cask "google-chrome"
 
-# Editor decision is still open.
+# Optional editor fallback.
 # cask "visual-studio-code"
 
 # Mac App Store apps can be tracked here once reviewed.

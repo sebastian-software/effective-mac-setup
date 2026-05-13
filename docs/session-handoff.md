@@ -64,6 +64,7 @@ The repo should serve as installation guide, status log, Brewfile, and eventuall
 - Set Git identity in `~/.gitconfig.local`.
 - Installed Go and Rust toolchains.
 - Installed Firefox and GitHub Desktop through Homebrew Casks.
+- Added Zed to the Brewfile as the tracked editor.
 - Created the initial documentation structure:
   - `README.md`
   - `Brewfile`
@@ -98,7 +99,7 @@ The `.local` files stay private and machine-specific. Do not commit them.
 1. Re-run `mas list` on a stable connection and review App Store entries.
 2. Decide whether Chrome should stay untracked or become a tracked fallback Cask.
 3. Verify the 1Password SSH Agent with GitHub in a normal terminal.
-4. Decide on the editor: VS Code, Cursor, or both.
+4. Install/verify Zed and decide whether VS Code is still needed as a fallback.
 5. Start the Vite React/TypeScript smoke test.
 
 Details: [dotfiles-plan.md](dotfiles-plan.md)
@@ -120,7 +121,7 @@ ssh -T git@github.com
 ```
 
 - Add reviewed Mac App Store apps through `mas` entries.
-- Finalize editor decision: VS Code, Cursor, or both.
+- Install/verify Zed and decide whether VS Code is still needed as a fallback.
 - Install/check browsers: Chrome, Firefox, Safari.
 - Install OrbStack only if local Docker/container workflows are actually needed.
 - Document a Vite React/TypeScript smoke test.

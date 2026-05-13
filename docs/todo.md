@@ -46,8 +46,11 @@ Prioritized list for the macOS developer setup.
 
 ## Editor
 
-- [ ] Decide on VS Code, Cursor, or both.
-- [ ] Check the VS Code shell command:
+- [x] Track Zed in the Brewfile.
+- [x] Install and verify Zed:
+  - `zed --version`
+- [ ] Decide whether VS Code is needed as a fallback.
+- [ ] Check the VS Code shell command only if VS Code is installed:
   - `code --version`
 - [ ] Install extensions:
   - ESLint
