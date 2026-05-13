@@ -1,4 +1,7 @@
+# Node.js versions are managed by fnm instead of Homebrew Node.
 eval "$(fnm env --use-on-cd --shell zsh)"
 eval "$(starship init zsh)"
 
+# Rustup installs Cargo tools here. Keep this conditional so a fresh shell
+# still works before the Rust toolchain has been initialized.
 [[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"

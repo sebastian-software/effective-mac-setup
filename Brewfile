@@ -1,4 +1,5 @@
-# Core CLI tools
+# Core CLI tools.
+# Node is intentionally managed by fnm, not Homebrew Node.
 brew "git"
 brew "gh"
 brew "fnm"
@@ -11,7 +12,8 @@ brew "eza"
 brew "mas"
 brew "chezmoi"
 
-# Common infrastructure/tooling languages, also useful for OSS projects.
+# Common infrastructure/tooling languages.
+# Go and Rust are useful for OSS work such as Ferrocat and modern CLI tooling.
 brew "go"
 brew "rustup-init"
 
@@ -25,6 +27,8 @@ cask "google-chrome"
 # cask "visual-studio-code"
 
 # Mac App Store apps.
+# Keep these entries reviewed; they were reconstructed from local MAS receipts
+# because `mas list` was unreliable during the initial train-network setup.
 mas "Pages", id: 361309726
 mas "Keynote", id: 361285480
 mas "Numbers", id: 361304891

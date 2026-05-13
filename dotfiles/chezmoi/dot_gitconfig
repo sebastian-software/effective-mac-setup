@@ -1,4 +1,6 @@
 [user]
+  # GitHub noreply keeps a personal email address out of public commit metadata
+  # while still associating commits with the GitHub account.
   name = Sebastian Werner
   email = swernerx@users.noreply.github.com
 

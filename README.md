@@ -4,25 +4,15 @@ A reproducible, lightweight macOS developer setup for modern Node.js frontend de
 
 Goal: keep a macOS device fast and lean while still making it ready for modern frontend work with TypeScript, React, Node.js, Go, and Rust.
 
-## Current Status
+## What This Repo Manages
 
-Checked on 2026-05-12:
+- `Brewfile`: Homebrew formulae, casks, and reviewed Mac App Store apps.
+- `dotfiles/chezmoi`: Git and zsh dotfiles managed by `chezmoi` in symlink mode.
+- `scripts/bootstrap.sh`: first-run helper for Homebrew packages, fnm, Node LTS, Corepack, and pnpm.
 
-- macOS 26.5, build 25F71
-- Apple Silicon (`arm64`)
-- Xcode Command Line Tools installed
-- Homebrew 5.1.11 at `/opt/homebrew`
-- GitHub CLI 2.92.0 installed and authenticated
-- `fnm` 1.39.0 installed
-- Node.js LTS 24.15.0 via `fnm`
-- Go and Rust planned as standard infrastructure toolchains
-- npm 11.12.1
-- Corepack 0.34.6
-- pnpm 11.1.1
+It intentionally does not manage SSH keys. GitHub SSH auth is handled through the 1Password SSH Agent.
 
-Details are tracked in [docs/status.md](docs/status.md).
-
-## Quick Start on a Fresh Mac
+## Fresh Mac
 
 ### 1. Xcode Command Line Tools
 
@@ -49,24 +39,29 @@ brew doctor
 brew bundle --file Brewfile
 ```
 
-### 4. Configure the Shell for Homebrew and fnm
+### 4. Configure Dotfiles
 
-`~/.zprofile`:
-
-```sh
-eval "$(/opt/homebrew/bin/brew shellenv zsh)"
-```
-
-`~/.zshrc`:
+This setup uses `chezmoi` with direct symlinks into this repo:
 
 ```sh
-eval "$(fnm env --use-on-cd --shell zsh)"
-eval "$(starship init zsh)"
+mkdir -p ~/.config/chezmoi
+cat > ~/.config/chezmoi/chezmoi.toml <<'EOF'
+sourceDir = "/Users/sebastian/Workspace/effective-mac-setup/dotfiles/chezmoi"
+mode = "symlink"
+EOF
+chezmoi apply
 ```
 
-Open a new terminal window afterwards.
+Managed targets:
 
-### 5. Install Node LTS
+```text
+~/.gitconfig
+~/.gitignore_global
+~/.zprofile
+~/.zshrc
+```
+
+### 5. Node LTS
 
 ```sh
 fnm install --lts
@@ -76,12 +71,26 @@ corepack enable
 pnpm --version
 ```
 
-### 6. Configure Git
+## Current Defaults
+
+- Git identity uses GitHub's noreply email address:
+  `swernerx@users.noreply.github.com`
+- Node.js is managed through `fnm`, not Homebrew Node.
+- Package manager is `pnpm` through Corepack.
+- Editor is Zed; VS Code remains a commented fallback in the Brewfile.
+- GitHub Desktop, Firefox, Chrome, Go, Rust, and Mac App Store apps are tracked in the Brewfile.
+
+## Checks
 
 ```sh
-git config --global user.name "Your Name"
-git config --global user.email "your@email"
-gh auth login
+brew bundle check --no-upgrade --file Brewfile
+chezmoi status
+chezmoi diff
+git config --global --list
+node --version
+pnpm --version
+go version
+rustc --version
 ```
 
 ## Recommended Project Defaults
@@ -94,34 +103,9 @@ gh auth login
 - Linting/formatting: ESLint + Prettier
 - Infrastructure-adjacent tooling: Go and Rust via Homebrew/rustup as needed
 
-## Package Management
+## Still Manual
 
-The `Brewfile` is curated before installation. It includes the approved baseline tools, `chezmoi` for dotfile management, Go/Rust for OSS work such as Ferrocat, Firefox, GitHub Desktop, and `mas` so Mac App Store apps can be added later as reproducible entries.
-
-Chrome, VS Code, container tooling, API clients, and database GUIs are intentionally left commented out until they are explicitly needed.
-
-## Next Steps
-
-The prioritized list lives in [docs/todo.md](docs/todo.md).
-
-For starting a new Codex session, use the compact handoff:
-
-[docs/session-handoff.md](docs/session-handoff.md)
-
-## Dotfiles
-
-Reusable Git and shell templates live in [dotfiles/](dotfiles/).
-
-Dotfile management uses `chezmoi` instead of a custom script. The Git configuration is managed directly:
-
-- Versioned defaults and public GitHub noreply identity: `dotfiles/templates/git/gitconfig`
-
-The current templates can still be applied manually while the `chezmoi` migration is prepared:
-
-```sh
-scripts/apply-dotfiles.sh
-```
-
-The migration plan lives in [docs/dotfiles-plan.md](docs/dotfiles-plan.md).
-
-Current `chezmoi` source files live in `dotfiles/chezmoi/`, and the local `chezmoi` config points there in symlink mode.
+- Verify the 1Password SSH Agent in a normal terminal:
+  `ssh -T git@github.com`
+- Re-run `mas list` on a stable connection and compare it with the Brewfile.
+- Decide whether OrbStack, VS Code, or API/database GUI tools are actually needed.

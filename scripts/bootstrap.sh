@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 echo "==> Checking Homebrew"
 if ! command -v brew >/dev/null 2>&1; then
   echo "Homebrew is not installed. Install it first:"
@@ -9,7 +11,7 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 echo "==> Installing packages from Brewfile"
-brew bundle --file Brewfile
+brew bundle --file "$repo_root/Brewfile"
 
 echo "==> Checking fnm"
 if ! command -v fnm >/dev/null 2>&1; then
@@ -25,6 +27,18 @@ fnm use lts-latest
 
 echo "==> Enabling Corepack"
 corepack enable
+
+echo "==> Checking chezmoi"
+if command -v chezmoi >/dev/null 2>&1; then
+  mkdir -p "$HOME/.config/chezmoi"
+  cat > "$HOME/.config/chezmoi/chezmoi.toml" <<EOF
+sourceDir = "$repo_root/dotfiles/chezmoi"
+mode = "symlink"
+EOF
+  chezmoi apply
+else
+  echo "chezmoi is not available yet. Re-run after brew bundle completes."
+fi
 
 echo "==> Versions"
 node --version
