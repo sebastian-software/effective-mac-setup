@@ -1,5 +1,6 @@
-[include]
-  path = ~/.gitconfig.local
+[user]
+  name = Sebastian Werner
+  email = swernerx@users.noreply.github.com
 
 [init]
   defaultBranch = main

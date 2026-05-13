@@ -86,15 +86,9 @@ sourceDir = "/Users/sebastian/Workspace/effective-mac-setup/dotfiles/chezmoi"
 mode = "symlink"
 ```
 
-Current public/shared files should continue to load private local files:
+Managed files are direct symlinks into this repo. The default setup does not use `.local` redirect files.
 
-```text
-~/.gitconfig.local
-~/.zshrc.local
-~/.zprofile.local
-```
-
-The `.local` files stay private and machine-specific. Do not commit them.
+Git identity is tracked directly with GitHub's public noreply email address. SSH and GitHub auth are handled through 1Password/GitHub tooling, not dotfiles.
 
 ## Next Useful Work Block
 
@@ -109,13 +103,13 @@ Details: [dotfiles-plan.md](dotfiles-plan.md)
 ## Safety Rules for Dotfiles
 
 - Do not overwrite real files.
-- Never copy private `.local` files back into the repo.
+- Do not put secrets, tokens, private hostnames, or private paths into tracked dotfiles.
 - Review `chezmoi diff` before applying changes.
 - Prefer small, explicit migrations over importing many files at once.
 
 ## Still Open in the Mac Setup
 
-- Set final Git identity in `~/.gitconfig.local`.
+- Git identity is already tracked with the GitHub noreply email address.
 - Verify the 1Password SSH Agent with GitHub:
 
 ```sh

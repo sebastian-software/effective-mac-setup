@@ -112,10 +112,9 @@ For starting a new Codex session, use the compact handoff:
 
 Reusable Git and shell templates live in [dotfiles/](dotfiles/).
 
-Dotfile management should use `chezmoi` instead of a custom script. The Git configuration is intentionally split into two parts:
+Dotfile management uses `chezmoi` instead of a custom script. The Git configuration is managed directly:
 
-- Versioned defaults: `dotfiles/templates/git/gitconfig`
-- Private identity: `~/.gitconfig.local`
+- Versioned defaults and public GitHub noreply identity: `dotfiles/templates/git/gitconfig`
 
 The current templates can still be applied manually while the `chezmoi` migration is prepared:
 

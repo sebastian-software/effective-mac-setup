@@ -17,8 +17,8 @@ Date: 2026-05-13
 | Tool | Status |
 | --- | --- |
 | Git | Homebrew Git 2.54.0 installed |
-| Git user.name | `Sebastian Werner` through `~/.gitconfig.local` |
-| Git user.email | `swernerx@users.noreply.github.com` through `~/.gitconfig.local` |
+| Git user.name | `Sebastian Werner` in managed `~/.gitconfig` |
+| Git user.email | `swernerx@users.noreply.github.com` in managed `~/.gitconfig` |
 | GitHub CLI | 2.92.0 installed |
 | GitHub Login | Verified in a normal terminal: account `swernerx`, SSH protocol, token in the keyring. |
 | SSH Agent | Intentionally handled by the 1Password SSH Agent; not meaningful to verify from the Codex sandbox. |
@@ -72,28 +72,18 @@ Managed home files are symlinks into this repo:
 ~/.zshrc
 ```
 
-Private local files stay outside the repo:
-
-```text
-~/.gitconfig.local
-~/.zprofile.local
-~/.zshrc.local
-```
-
-`~/.zshrc` loads fnm, starship, Cargo when available, and `~/.zshrc.local`:
+`~/.zshrc` loads fnm, starship, and Cargo when available:
 
 ```sh
 eval "$(fnm env --use-on-cd --shell zsh)"
 eval "$(starship init zsh)"
 [[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"
-[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 ```
 
-`~/.zprofile` loads Homebrew and `~/.zprofile.local`:
+`~/.zprofile` loads Homebrew:
 
 ```sh
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
-[[ -f "$HOME/.zprofile.local" ]] && source "$HOME/.zprofile.local"
 ```
 
 ## Repo

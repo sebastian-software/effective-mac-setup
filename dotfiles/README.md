@@ -5,22 +5,20 @@ This directory contains intentionally small, reproducible templates for new Macs
 Principles:
 
 - Version defaults, aliases, and useful tool configuration.
-- Keep private values local.
 - Do not automatically overwrite existing files.
 
 ## Git
 
-The global Git configuration is split into two parts:
+The global Git configuration is managed directly:
 
-- `~/.gitconfig`: versioned defaults from `templates/git/gitconfig`
-- `~/.gitconfig.local`: private identity, not versioned
+- `~/.gitconfig`: versioned defaults and public GitHub noreply identity from `templates/git/gitconfig`
 
-Example `~/.gitconfig.local`:
+The Git email uses GitHub's noreply address to avoid publishing a personal email address in commits:
 
 ```ini
 [user]
   name = Sebastian Werner
-  email = sebastian@example.com
+  email = swernerx@users.noreply.github.com
 ```
 
 Apply:

@@ -1,6 +1,6 @@
 # Dotfiles Plan
 
-Goal: this repo should become the source of truth for shared dotfiles while keeping private and machine-specific values outside the public repository.
+Goal: this repo should become the source of truth for shared dotfiles while keeping secrets out of shell and Git configuration.
 
 ## Recommendation
 
@@ -12,7 +12,7 @@ Use `chezmoi` instead of building a custom TypeScript dotfile manager.
 - preview changes before applying them
 - apply dotfiles safely across machines
 - support machine-specific templates
-- keep secrets out of the public repo
+- keep secrets out of the public repo when they are introduced later
 - run setup scripts when needed
 - integrate with password managers and encryption workflows later
 
@@ -34,7 +34,7 @@ That would work, but most of the complexity is not specific to this setup:
 - backing up existing files
 - applying changes idempotently
 - supporting machine-specific variations
-- avoiding accidental leakage of private values
+- avoiding accidental leakage of private values if secrets are introduced later
 
 Those are exactly the long-lived edge cases a dedicated dotfile manager should own.
 
@@ -67,22 +67,14 @@ Then migrate into `chezmoi` deliberately:
   dot_zshrc
 ```
 
-Private values should remain local:
-
-```text
-~/.gitconfig.local
-~/.zshrc.local
-~/.zprofile.local
-```
-
-The managed files should continue to load those local files.
+The managed files are direct symlinks into this repo. There are no `.local` redirects in the default setup.
 
 ## Safety Rules
 
 - Do not overwrite existing home-directory files without reviewing `chezmoi diff`.
-- Do not commit private `.local` files.
-- Keep Git identity, private aliases, tokens, hostnames, and machine-specific paths outside the repo.
-- Do not use `git config --global user.*` for identity after `chezmoi` has symlinked `~/.gitconfig`; edit `~/.gitconfig.local` instead.
+- Do not put tokens, hostnames, private aliases, or secret paths into tracked dotfiles.
+- Git identity is tracked directly because it uses GitHub's public noreply address.
+- `git config --global ...` writes into the symlinked repo file, so treat it as an intentional repo edit.
 - Prefer `chezmoi diff` before `chezmoi apply`.
 - Prefer small migrations over importing a whole home directory.
 
@@ -127,7 +119,7 @@ chezmoi apply
 
 - Should dotfiles live in this setup repo or in a separate dotfiles repo?
 - Should `chezmoi` use plain files first, or templates immediately?
-- Should 1Password integration be used later for private values, or should `.local` files remain purely local?
+- Should 1Password integration be used later if actual secrets need to enter dotfile workflows?
 
 ## Implemented State
 

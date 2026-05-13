@@ -2,5 +2,3 @@ eval "$(fnm env --use-on-cd --shell zsh)"
 eval "$(starship init zsh)"
 
 [[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"
-
-[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
