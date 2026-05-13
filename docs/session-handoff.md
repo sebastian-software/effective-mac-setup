@@ -65,6 +65,8 @@ The repo should serve as installation guide, status log, Brewfile, and eventuall
 - Installed Go and Rust toolchains.
 - Installed Firefox and GitHub Desktop through Homebrew Casks.
 - Added Zed to the Brewfile as the tracked editor.
+- Added all currently installed Homebrew Casks, including Google Chrome.
+- Added locally detected Mac App Store apps to the Brewfile.
 - Created the initial documentation structure:
   - `README.md`
   - `Brewfile`
@@ -96,8 +98,8 @@ The `.local` files stay private and machine-specific. Do not commit them.
 
 ## Next Useful Work Block
 
-1. Re-run `mas list` on a stable connection and review App Store entries.
-2. Decide whether Chrome should stay untracked or become a tracked fallback Cask.
+1. Re-run `mas list` on a stable connection and compare it with the Brewfile MAS entries.
+2. Review whether all tracked MAS apps should stay in the reproducible setup.
 3. Verify the 1Password SSH Agent with GitHub in a normal terminal.
 4. Install/verify Zed and decide whether VS Code is still needed as a fallback.
 5. Start the Vite React/TypeScript smoke test.

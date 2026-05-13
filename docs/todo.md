@@ -37,7 +37,7 @@ Prioritized list for the macOS developer setup.
 - [ ] Verify the 1Password SSH Agent in a normal terminal:
   - `ssh -T git@github.com`
 - [x] Run `brew bundle --file Brewfile` to install missing CLI tools, Go/Rust tooling, and apps.
-- [ ] Add reviewed Mac App Store apps through `mas` entries:
+- [x] Add reviewed Mac App Store apps through `mas` entries:
   - `docs/mas-inventory.md`
 - [x] Open a new terminal and verify the Node setup:
   - `node --version`
@@ -64,7 +64,7 @@ Prioritized list for the macOS developer setup.
 ## Browsers and Runtime
 
 - [ ] Evaluate Helium as the daily browser.
-- [ ] Install Chrome only if a fallback Chromium browser is needed.
+- [x] Track installed Chrome as a fallback Chromium browser.
 - [x] Install Firefox.
 - [ ] Use Safari for WebKit checks.
 - [ ] Install OrbStack if Docker/containers are actually needed.

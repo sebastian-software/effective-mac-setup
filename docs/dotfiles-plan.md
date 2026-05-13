@@ -82,6 +82,7 @@ The managed files should continue to load those local files.
 - Do not overwrite existing home-directory files without reviewing `chezmoi diff`.
 - Do not commit private `.local` files.
 - Keep Git identity, private aliases, tokens, hostnames, and machine-specific paths outside the repo.
+- Do not use `git config --global user.*` for identity after `chezmoi` has symlinked `~/.gitconfig`; edit `~/.gitconfig.local` instead.
 - Prefer `chezmoi diff` before `chezmoi apply`.
 - Prefer small migrations over importing a whole home directory.
 

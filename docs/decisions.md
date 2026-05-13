@@ -45,7 +45,7 @@ Current baseline:
 - Useful terminal helpers: jq, bat, eza.
 - Dotfile management through `chezmoi`.
 - Mac App Store tracking through `mas`.
-- GitHub Desktop, Zed, and Firefox as reproducible GUI installs; Chrome stays commented as a fallback while Helium is evaluated.
+- GitHub Desktop, Zed, Firefox, and Google Chrome as reproducible GUI installs.
 
 Removed or deferred for now:
 

@@ -30,7 +30,7 @@ Date: 2026-05-13
 | Go | 1.26.3 installed |
 | Rust | rustup 1.29.0 with rustc/cargo 1.95.0 stable installed |
 | chezmoi | 2.70.3 installed and configured in symlink mode |
-| mas | 7.0.0 installed; `mas config` works, `mas list` hung during train-network setup |
+| mas | 7.0.0 installed; MAS apps tracked from local receipts because `mas list` hung |
 
 ## Apps Found
 
@@ -41,7 +41,7 @@ Date: 2026-05-13
 - Firefox
 - GitHub Desktop
 - Zed 1.1.8
-- Google Chrome (installed, but intentionally not tracked in the Brewfile yet)
+- Google Chrome
 - Lungo
 - Microsoft Office apps
 - Pure Paste
@@ -53,6 +53,8 @@ Date: 2026-05-13
 ## Changes Already Made
 
 Homebrew Bundle has installed the curated Brewfile. The deprecated `tap "homebrew/bundle"` entry was removed because the tap is now empty/deprecated.
+
+Current Homebrew inventory is tracked in [brew-inventory.md](brew-inventory.md). Mac App Store apps are tracked in [mas-inventory.md](mas-inventory.md).
 
 `chezmoi` is configured locally:
 
