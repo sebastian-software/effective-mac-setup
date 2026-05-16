@@ -12,6 +12,8 @@ Goal: keep a macOS device fast and lean while still making it ready for modern f
 
 It intentionally does not manage SSH keys. GitHub SSH auth is handled through the 1Password SSH Agent.
 
+macOS system settings are not blindly exported. Desired settings should be named, researched, and added one by one; see [ADR 0001](docs/adr-0001-macos-settings.md).
+
 ## Fresh Mac
 
 ### 1. Xcode Command Line Tools
