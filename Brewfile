@@ -66,10 +66,6 @@ cask "firefox"
 # https://www.google.com/chrome/
 cask "google-chrome"
 
-# Optional editor fallback if Zed is not enough for a workflow.
-# https://code.visualstudio.com/
-# cask "visual-studio-code"
-
 # Pages: Apple word processor; installed from the Mac App Store.
 # https://apps.apple.com/app/id361309726
 mas "Pages", id: 361309726
@@ -125,7 +121,3 @@ mas "Velja", id: 1607635845
 # Pure Paste: strips formatting from clipboard text; installed from the Mac App Store.
 # https://apps.apple.com/app/id1611378436
 mas "Pure Paste", id: 1611378436
-
-# PingZilla: network/ping utility; installed from the Mac App Store.
-# https://apps.apple.com/app/id6757017560
-mas "PingZilla", id: 6757017560
