@@ -46,13 +46,19 @@ brew "chezmoi"
 # https://github.com/kcrawford/dockutil
 brew "dockutil"
 
+# trash: moves files to the macOS Trash from the shell; used by the explicit
+# del helper while leaving rm untouched. Homebrew keeps it keg-only, so the
+# helper calls /opt/homebrew/opt/trash/bin/trash when needed.
+# https://github.com/ali-rantakari/trash
+brew "trash"
+
 # Go: infrastructure and CLI language, useful for OSS work such as Ferrocat.
 # https://go.dev/
 brew "go"
 
-# rustup-init: Rust toolchain installer; rustc/cargo are managed by rustup, not Homebrew rust.
+# rustup: Rust toolchain installer; rustc/cargo are managed by rustup, not Homebrew rust.
 # https://rust-lang.github.io/rustup/
-brew "rustup-init"
+brew "rustup"
 
 # GitHub Desktop: visual Git/GitHub client for repo review and occasional GUI workflows.
 # https://desktop.github.com/

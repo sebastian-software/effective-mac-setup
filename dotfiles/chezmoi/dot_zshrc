@@ -1,7 +1,181 @@
+# Keep PATH entries unique when this file is sourced repeatedly during dotfile
+# work. This mirrors the small-shell-helper style seen in holman/dotfiles.
+typeset -U path PATH
+
 # Node.js versions are managed by fnm instead of Homebrew Node.
 eval "$(fnm env --use-on-cd --shell zsh)"
-eval "$(starship init zsh)"
+
+# Zed is the primary editor here. "--wait" keeps Git and other CLI tools from
+# continuing before the editor window is closed.
+export EDITOR="zed --wait"
+export VISUAL="zed --wait"
+
+# Go tools installed with "go install" land in GOBIN. Keep this explicit so
+# project CLIs are available on fresh machines.
+export GOPATH="${GOPATH:-$HOME/go}"
+export GOBIN="${GOBIN:-$GOPATH/bin}"
+path=("$GOBIN" $path)
 
 # Rustup installs Cargo tools here. Keep this conditional so a fresh shell
 # still works before the Rust toolchain has been initialized.
-[[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"
+[[ -d "$HOME/.cargo/bin" ]] && path=("$HOME/.cargo/bin" $path)
+
+# Navigation helpers. Inspired by the compact directory aliases commonly seen
+# in mathiasbynens/dotfiles and holman/dotfiles.
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias -- -='cd -'
+
+mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
+
+reload() {
+  exec zsh
+}
+
+# Better listing/search defaults without overriding POSIX muscle memory.
+# Inspired by recurring eza/bat/rg patterns in modern dotfiles collections.
+alias ll='eza -la --git'
+alias la='eza -a'
+alias search='rg'
+
+# Filesystem helpers. Keep destructive operations explicit: rm/cp/mv are not
+# aliased. cleanup-dsstore is a macOS staple as seen in mathiasbynens/dotfiles.
+alias mkdir='mkdir -p'
+alias dfh='df -h'
+alias duh='du -h'
+
+ducks() {
+  du -cksh -- ./*(N) ./.*(N) 2>/dev/null | sort -hr | head -n 20
+}
+
+cleanup-dsstore() {
+  find "${1:-.}" -name .DS_Store -type f -delete
+}
+
+# Git shortcuts. Short shell aliases are intentionally kept close to common
+# oh-my-zsh/holman-style conventions while the richer aliases live in Git.
+alias g='git'
+alias gs='git status --short --branch'
+alias ga='git add'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gp='git push'
+alias gpl='git pull'
+alias gl='git lg'
+alias gco='git checkout'
+alias gb='git branch --sort=-committerdate'
+alias gundo='git reset --soft HEAD~1'
+
+# GitHub CLI helpers. These prefer gh over hand-parsing remotes, which keeps the
+# aliases simple and robust across HTTPS/SSH remotes.
+repo() {
+  gh repo view --web "$@"
+}
+
+pr() {
+  gh pr view --web "$@"
+}
+
+ci() {
+  gh pr checks "$@"
+}
+
+issues() {
+  gh issue list --web "$@"
+}
+
+clonecd() {
+  if [[ $# -ne 1 ]]; then
+    echo "usage: clonecd <owner/repo>" >&2
+    return 2
+  fi
+
+  local repo="$1"
+  local dir="${repo##*/}"
+  dir="${dir%.git}"
+  gh repo clone "$repo" && cd "$dir"
+}
+
+# Dotfile and package-management checks. Mutating commands like "chezmoi apply"
+# and "brew bundle dump" stay intentionally explicit.
+alias czs='chezmoi status'
+alias czd='chezmoi diff'
+alias brewc='brew bundle check --no-upgrade --file Brewfile'
+
+# Trash workflow. Inspired by dotfiles that avoid making rm safer by surprise:
+# keep rm untouched and expose an explicit "move to Trash" command instead.
+del() {
+  local trash_cmd
+  if command -v trash >/dev/null 2>&1; then
+    trash_cmd="trash"
+  elif [[ -x /opt/homebrew/opt/trash/bin/trash ]]; then
+    trash_cmd="/opt/homebrew/opt/trash/bin/trash"
+  else
+    echo "trash CLI is not installed. Run: brew bundle --file Brewfile" >&2
+    return 127
+  fi
+
+  "$trash_cmd" "$@"
+}
+
+# Small network diagnostics, as commonly seen in paulirish/dotfiles-style
+# helper sets. Commands are explicit because some reach outside the machine.
+myip() {
+  curl -fsSL https://ifconfig.me
+  echo
+}
+
+ports() {
+  lsof -nP -iTCP -sTCP:LISTEN "$@"
+}
+
+flushdns() {
+  sudo dscacheutil -flushcache
+  sudo killall -HUP mDNSResponder
+}
+
+# Language workflow aliases for the current Go/Rust/Node setup.
+alias gob='go build ./...'
+alias got='go test ./...'
+alias gor='go run .'
+alias cc='cargo check'
+alias ct='cargo test'
+alias cr='cargo run'
+alias ni='npm install'
+alias nci='npm ci'
+alias nr='npm run'
+alias nt='npm test'
+
+# 1Password / SSH diagnostics. The actual SSH agent integration remains managed
+# by 1Password; these helpers only inspect or verify the current shell state.
+op-accounts() {
+  command -v op >/dev/null 2>&1 || {
+    echo "1Password CLI is not installed." >&2
+    return 127
+  }
+
+  op account list
+}
+
+op-whoami() {
+  command -v op >/dev/null 2>&1 || {
+    echo "1Password CLI is not installed." >&2
+    return 127
+  }
+
+  op whoami
+}
+
+ssh-agent-info() {
+  echo "SSH_AUTH_SOCK=${SSH_AUTH_SOCK:-}"
+  ssh-add -l
+}
+
+gh-ssh-test() {
+  ssh -T git@github.com
+}
+
+eval "$(starship init zsh)"

@@ -20,6 +20,13 @@ defaults write -g com.apple.mouse.scaling -float "$MOUSE_TRACKING_SPEED"
 # Why: keep the Dock intentional instead of letting macOS add transient items.
 defaults write com.apple.dock show-recents -bool false
 
+# Dock: keep the current compact-ish icon size.
+#
+# Domain/key: com.apple.dock tilesize
+# Why: serialize the current local preference without also forcing magnification.
+# Inspired by the Dock defaults commonly documented in mathiasbynens/dotfiles.
+defaults write com.apple.dock tilesize -int 45
+
 # Dock: pinned app list.
 #
 # Tool: dockutil
@@ -47,6 +54,35 @@ else
   echo "dockutil is not installed; skipping Dock app layout." >&2
 fi
 
+# Screenshots: keep captures off the Desktop root and remove window shadows.
+#
+# Domain/keys: com.apple.screencapture location, disable-shadow
+# Why: cleaner Desktop and cleaner screenshots for issues, docs, and sharing.
+# As seen in mathiasbynens/dotfiles-style macOS defaults.
+SCREENSHOT_DIR="$HOME/Desktop/Screenshots"
+mkdir -p "$SCREENSHOT_DIR"
+defaults write com.apple.screencapture location -string "$SCREENSHOT_DIR"
+defaults write com.apple.screencapture disable-shadow -bool true
+
+# Finder and global file handling.
+#
+# Domain/keys: NSGlobalDomain AppleShowAllExtensions,
+# com.apple.finder FXEnableExtensionChangeWarning, NewWindowTarget
+# Why: development workflows benefit from visible extensions and fewer rename
+# prompts; new Finder windows should start somewhere stable and personal.
+defaults write -g AppleShowAllExtensions -bool true
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+defaults write com.apple.finder NewWindowTargetPath -string "file://$HOME/"
+
+# Keyboard repeat.
+#
+# Domain/keys: NSGlobalDomain KeyRepeat, InitialKeyRepeat
+# Why: make keyboard navigation feel snappier without using extreme values.
+# Inspired by common developer macOS defaults in paulirish/dotfiles.
+defaults write -g KeyRepeat -int 2
+defaults write -g InitialKeyRepeat -int 15
+
 # iCloud Drive: keep Desktop and Documents in iCloud Drive.
 #
 # Domain/keys: com.apple.finder FXICloudDriveDesktop, FXICloudDriveDocuments
@@ -58,3 +94,4 @@ defaults write com.apple.finder FXICloudDriveDocuments -bool true
 # Restart affected user agents so changes become visible.
 killall Dock 2>/dev/null || true
 killall Finder 2>/dev/null || true
+killall SystemUIServer 2>/dev/null || true

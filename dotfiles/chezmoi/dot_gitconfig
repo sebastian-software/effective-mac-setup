@@ -27,6 +27,49 @@
 
 [tag]
   sort = version:refname
+
+[diff]
+  # Highlight moved code in diffs. Inspired by the "make Git output easier to
+  # read" defaults commonly seen in mathiasbynens/dotfiles and paulirish/dotfiles.
+  colorMoved = default
+
+[merge]
+  # zdiff3 includes the merge base in conflict markers and is easier to reason
+  # about during non-trivial merges than the classic conflict style.
+  conflictStyle = zdiff3
+
+[commit]
+  # Show the staged diff in the commit editor. As seen in many mature dotfiles,
+  # this nudges commit messages toward the actual change.
+  verbose = true
+
+[status]
+  # Surface hidden stash state during normal status checks.
+  showStash = true
+
+[alias]
+  # Small, readable Git aliases inspired by recurring patterns in
+  # holman/dotfiles, paulirish/dotfiles, and awesome-dotfiles examples.
+  s = status --short --branch
+  st = status
+  a = add
+  c = commit
+  cm = commit -m
+  p = push
+  pl = pull
+  co = checkout
+  sw = switch
+  b = branch --sort=-committerdate
+
+  # Repository insight helpers.
+  lg = log --graph --abbrev-commit --decorate --date=relative --format=format:%C(bold blue)%h%C(reset) %C(green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset) --all
+  aliases = config --get-regexp ^alias\\.
+  root = rev-parse --show-toplevel
+
+  # Delete only merged local branches, never protected branch names, and always
+  # ask first. This keeps the common cleanup helper from becoming a footgun.
+  cleanup-branches = "!f() { current=$(git branch --show-current); branches=$(git branch --merged | sed 's/^[* ]*//' | grep -Ev \"^(main|master|develop|$current)$\" | grep -v '^$'); if [ -z \"$branches\" ]; then echo \"No merged local branches to delete.\"; exit 0; fi; echo \"$branches\"; printf \"Delete these branches? [y/N] \"; read answer; case \"$answer\" in y|Y|yes|YES) echo \"$branches\" | xargs git branch -d ;; *) echo \"Aborted.\" ;; esac; }; f"
+
 [credential "https://github.com"]
   helper =
   helper = !/opt/homebrew/bin/gh auth git-credential
