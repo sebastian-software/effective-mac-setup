@@ -8,6 +8,7 @@ Goal: keep a macOS device fast and lean while still making it ready for modern f
 
 - `Brewfile`: Homebrew formulae, casks, and reviewed Mac App Store apps.
 - `dotfiles/chezmoi`: Git and zsh dotfiles managed by `chezmoi` in symlink mode.
+- `macos/defaults.sh`: curated macOS settings that are applied explicitly.
 - `scripts/bootstrap.sh`: first-run helper for Homebrew packages, fnm, Node LTS, Corepack, and pnpm.
 
 It intentionally does not manage SSH keys. GitHub SSH auth is handled through the 1Password SSH Agent.
@@ -71,6 +72,15 @@ fnm default lts-latest
 fnm use lts-latest
 corepack enable
 pnpm --version
+```
+
+### 6. macOS Settings
+
+Review the curated settings first, especially mouse speed and Dock items:
+
+```sh
+sed -n '1,220p' macos/defaults.sh
+macos/defaults.sh
 ```
 
 ## Current Defaults

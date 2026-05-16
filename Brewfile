@@ -42,6 +42,10 @@ brew "mas"
 # https://chezmoi.io/
 brew "chezmoi"
 
+# dockutil: manages Dock app links without hand-writing Dock bookmark plists.
+# https://github.com/kcrawford/dockutil
+brew "dockutil"
+
 # Go: infrastructure and CLI language, useful for OSS work such as Ferrocat.
 # https://go.dev/
 brew "go"
