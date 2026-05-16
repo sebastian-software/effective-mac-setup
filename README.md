@@ -10,6 +10,7 @@ Goal: keep a macOS device fast and lean while still making it ready for modern f
 - `dotfiles/chezmoi`: Git and zsh dotfiles managed by `chezmoi` in symlink mode.
 - `macos/defaults.sh`: curated macOS settings that are applied explicitly.
 - `scripts/bootstrap.sh`: first-run helper for Homebrew packages, fnm, Node LTS, Corepack, and pnpm.
+- `scripts/doctor.sh`: compact health check for Brew, dotfiles, runtimes, apps, auth, and MAS.
 
 It intentionally does not manage SSH keys. GitHub SSH auth is handled through the 1Password SSH Agent.
 
@@ -83,6 +84,22 @@ sed -n '1,220p' macos/defaults.sh
 macos/defaults.sh
 ```
 
+### 7. Setup Doctor
+
+Run the doctor after bootstrap, after Brewfile changes, or when the shell feels off:
+
+```sh
+scripts/doctor.sh
+```
+
+It prints compact `OK`, `WARN`, and `FAIL` lines. Warnings such as flaky MAS or network checks do not fail the run. To re-apply the safe setup steps, use:
+
+```sh
+scripts/doctor.sh --fix
+```
+
+`--fix` may run `brew bundle`, configure/apply `chezmoi`, install Node LTS through `fnm`, and enable Corepack/pnpm. It does not apply `macos/defaults.sh` and does not change SSH or 1Password configuration.
+
 ## Current Defaults
 
 - Git identity uses GitHub's noreply email address:
@@ -95,6 +112,7 @@ macos/defaults.sh
 ## Checks
 
 ```sh
+scripts/doctor.sh
 brew bundle check --no-upgrade --file Brewfile
 chezmoi status
 chezmoi diff

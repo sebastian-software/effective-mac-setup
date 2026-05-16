@@ -105,14 +105,24 @@ alias czs='chezmoi status'
 alias czd='chezmoi diff'
 alias brewc='brew bundle check --no-upgrade --file Brewfile'
 
+setup-doctor() {
+  local setup_repo="${EFFECTIVE_MAC_SETUP:-$HOME/Workspace/effective-mac-setup}"
+  if [[ ! -x "$setup_repo/scripts/doctor.sh" ]]; then
+    echo "setup doctor not found at $setup_repo/scripts/doctor.sh" >&2
+    return 127
+  fi
+
+  "$setup_repo/scripts/doctor.sh" "$@"
+}
+
 # Trash workflow. Inspired by dotfiles that avoid making rm safer by surprise:
 # keep rm untouched and expose an explicit "move to Trash" command instead.
 del() {
   local trash_cmd
-  if command -v trash >/dev/null 2>&1; then
-    trash_cmd="trash"
-  elif [[ -x /opt/homebrew/opt/trash/bin/trash ]]; then
+  if [[ -x /opt/homebrew/opt/trash/bin/trash ]]; then
     trash_cmd="/opt/homebrew/opt/trash/bin/trash"
+  elif command -v trash >/dev/null 2>&1; then
+    trash_cmd="trash"
   else
     echo "trash CLI is not installed. Run: brew bundle --file Brewfile" >&2
     return 127
