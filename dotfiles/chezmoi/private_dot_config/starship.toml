@@ -1,0 +1,81 @@
+# Lean prompt for this Mac setup.
+#
+# Inspired by the "show context only when it matters" approach common in
+# dotfiles repos: directory and Git are always useful, language runtimes only
+# appear inside matching projects, and slow/noisy modules stay out of the way.
+
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = true
+command_timeout = 500
+scan_timeout = 30
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+$package\
+$nodejs\
+$golang\
+$rust\
+$cmd_duration\
+$line_break\
+$status\
+$character"""
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
+
+[cmd_duration]
+min_time = 2000
+format = "took [$duration]($style) "
+style = "yellow"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "cyan bold"
+
+[git_branch]
+format = "on [$symbol$branch]($style) "
+symbol = "git:"
+style = "purple bold"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "red bold"
+conflicted = "=${count}"
+ahead = ">${count}"
+behind = "<${count}"
+diverged = "<>${ahead_count}/${behind_count}"
+up_to_date = ""
+untracked = "?${count}"
+stashed = "S${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "R${count}"
+deleted = "-${count}"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "yellow bold"
+
+[golang]
+format = "go [$version](bold cyan) "
+
+[nodejs]
+format = "node [$version](bold green) "
+
+[package]
+format = "pkg [$version](208 bold) "
+
+[rust]
+format = "rust [$version](bold red) "
+
+[status]
+disabled = false
+format = "[$symbol$status]($style) "
+symbol = "exit "
+style = "red bold"

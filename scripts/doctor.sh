@@ -235,6 +235,28 @@ check_apps() {
   fi
 }
 
+check_editor_prompt() {
+  section "Editor and prompt"
+  local starship_config="$repo_root/dotfiles/chezmoi/private_dot_config/starship.toml"
+  local zed_settings="$repo_root/dotfiles/chezmoi/private_dot_config/zed/settings.json"
+
+  if [[ -f "$starship_config" ]]; then
+    if STARSHIP_CONFIG="$starship_config" starship print-config >/dev/null 2>&1; then
+      ok "starship config parses"
+    else
+      fail "starship config does not parse"
+    fi
+  else
+    fail "starship config is missing"
+  fi
+
+  if [[ -s "$zed_settings" ]]; then
+    ok "Zed settings are tracked"
+  else
+    fail "Zed settings are missing or empty"
+  fi
+}
+
 check_dotfiles() {
   section "Dotfiles"
   if bash -n "$repo_root/scripts/bootstrap.sh"; then
@@ -383,6 +405,7 @@ fi
 check_homebrew
 check_tools
 check_apps
+check_editor_prompt
 check_dotfiles
 check_languages
 check_auth_network

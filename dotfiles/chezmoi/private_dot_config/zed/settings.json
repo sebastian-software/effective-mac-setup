@@ -1,0 +1,29 @@
+// Zed settings managed by chezmoi.
+//
+// This file intentionally tracks only editor preferences. Zed prompt databases,
+// generated caches, and local theme experiments stay outside the repo.
+//
+// For information on how to configure Zed, see:
+// https://zed.dev/docs/configuring-zed
+{
+  "project_panel": {
+    "git_status_indicator": true,
+    "bold_folder_labels": false,
+    "indent_size": 16.0,
+    "default_width": 280.0,
+    "dock": "left"
+  },
+  "tab_size": 2,
+  "minimap": {
+    "show": "never"
+  },
+  "buffer_font_family": ".ZedMono",
+  "ui_font_family": ".SystemUIFont",
+  "ui_font_size": 16,
+  "buffer_font_size": 14.0,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  }
+}

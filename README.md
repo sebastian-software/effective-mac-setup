@@ -8,6 +8,7 @@ Goal: keep a macOS device fast and lean while still making it ready for modern f
 
 - `Brewfile`: Homebrew formulae, casks, and reviewed Mac App Store apps.
 - `dotfiles/chezmoi`: Git and zsh dotfiles managed by `chezmoi` in symlink mode.
+- `dotfiles/chezmoi/private_dot_config`: app config such as Starship and Zed settings.
 - `macos/defaults.sh`: curated macOS settings that are applied explicitly.
 - `scripts/bootstrap.sh`: first-run helper for Homebrew packages, fnm, Node LTS, Corepack, and pnpm.
 - `scripts/doctor.sh`: compact health check for Brew, dotfiles, runtimes, apps, auth, and MAS.
@@ -61,6 +62,8 @@ Managed targets:
 ```text
 ~/.gitconfig
 ~/.gitignore_global
+~/.config/starship.toml
+~/.config/zed/settings.json
 ~/.zprofile
 ~/.zshrc
 ```
@@ -107,6 +110,7 @@ scripts/doctor.sh --fix
 - Node.js is managed through `fnm`, not Homebrew Node.
 - Package manager is `pnpm` through Corepack.
 - Editor is Zed; VS Code remains a commented fallback in the Brewfile.
+- Prompt is Starship with a lean managed config.
 - GitHub Desktop, Firefox, Chrome, Go, Rust, and Mac App Store apps are tracked in the Brewfile.
 
 ## Checks
