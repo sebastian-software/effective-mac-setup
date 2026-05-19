@@ -1,0 +1,28 @@
+# Colima default profile tuned for Apple Silicon Macs.
+#
+# VZ uses Apple's Virtualization.framework and virtiofs gives the fastest Colima
+# file mounts on macOS 13+. This profile keeps Docker CLI compatibility while
+# avoiding Docker Desktop and wide home-directory mounts.
+
+cpu: 4
+memory: 8
+disk: 100
+
+arch: host
+runtime: docker
+vmType: vz
+mountType: virtiofs
+
+# Keep native ARM images as the default path, but allow amd64 images through
+# Rosetta when projects still depend on them.
+rosetta: true
+
+autoActivate: true
+
+mounts:
+  - location: ~/Workspace
+    writable: true
+
+docker:
+  features:
+    buildkit: true

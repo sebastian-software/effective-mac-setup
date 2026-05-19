@@ -28,7 +28,7 @@ does not store secrets, and it does not try to own the whole machine.
 ## What It Manages
 
 - `Brewfile`: Homebrew formulae, casks, taps, and reviewed Mac App Store apps.
-- `dotfiles/chezmoi`: Git, zsh, fish, Starship, Zed, Ghostty/cmux, and shared helper commands.
+- `dotfiles/chezmoi`: Git, zsh, fish, Starship, Zed, Ghostty/cmux, Colima, and shared helper commands.
 - `macos/defaults.sh`: small, named macOS settings that are safe to review before applying.
 - `scripts/bootstrap.sh`: first-run installer for packages, dotfiles, Node LTS, Corepack, and pnpm.
 - `scripts/doctor.sh`: health check for packages, apps, dotfiles, runtimes, auth, MAS, and shell setup.
@@ -138,6 +138,7 @@ Managed targets include:
 ~/.config/ghostty/config
 ~/.config/starship.toml
 ~/.config/zed/settings.json
+~/.colima/default/colima.yaml
 ~/.local/bin
 ~/.zprofile
 ~/.zshrc
@@ -205,6 +206,7 @@ edit the local mapping and `op-env-load` to reload it in the current shell.
 - zoxide provides smart directory jumping.
 - Git LFS, hyperfine, wget, and Semgrep are tracked as useful baseline CLI tools.
 - Containers use the Docker CLI with Colima as the lightweight local runtime.
+- Colima is configured for Apple Silicon with VZ, virtiofs, Docker runtime, BuildKit, and a writable `~/Workspace` mount.
 - GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and reviewed Mac App Store apps are tracked in the Brewfile.
 
 ## Useful Checks
@@ -230,6 +232,7 @@ Start with these files:
 - `dotfiles/chezmoi/dot_gitconfig`: change identity, signing, and aliases.
 - `dotfiles/chezmoi/private_dot_config/fish/config.fish`: adjust shell defaults.
 - `dotfiles/chezmoi/private_dot_config/ghostty/config`: adjust cmux/Ghostty behavior.
+- `dotfiles/chezmoi/private_dot_colima/default/colima.yaml`: adjust the default Colima VM resources and mounts.
 - `macos/defaults.sh`: review every setting before applying it.
 
 Good first customizations:

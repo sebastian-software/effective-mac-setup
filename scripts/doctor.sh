@@ -350,6 +350,19 @@ check_macos_defaults() {
   default_value_ok com.apple.finder FXICloudDriveDocuments "1" "iCloud Documents"
 }
 
+colima_config_has_expected_defaults() {
+  local config="$1"
+
+  grep -q '^arch: host$' "$config" &&
+    grep -q '^runtime: docker$' "$config" &&
+    grep -q '^vmType: vz$' "$config" &&
+    grep -q '^mountType: virtiofs$' "$config" &&
+    grep -q '^rosetta: true$' "$config" &&
+    grep -q '^autoActivate: true$' "$config" &&
+    grep -q '^  - location: ~/Workspace$' "$config" &&
+    grep -q '^    buildkit: true$' "$config"
+}
+
 check_editor_prompt() {
   section "Editor, prompt, and shells"
   local starship_config="$repo_root/dotfiles/chezmoi/private_dot_config/starship.toml"
@@ -412,6 +425,8 @@ check_editor_prompt() {
 
 check_dotfiles() {
   section "Dotfiles"
+  local colima_config="$repo_root/dotfiles/chezmoi/private_dot_colima/default/colima.yaml"
+
   if bash -n "$repo_root/scripts/bootstrap.sh"; then
     ok "bootstrap.sh syntax is valid"
   else
@@ -446,6 +461,12 @@ check_dotfiles() {
     fail "gitconfig does not parse"
   fi
 
+  if [[ -f "$colima_config" ]] && colima_config_has_expected_defaults "$colima_config"; then
+    ok "Colima Apple Silicon config is tracked"
+  else
+    fail "Colima Apple Silicon config is missing expected settings"
+  fi
+
   if command -v chezmoi >/dev/null 2>&1; then
     if chezmoi status >/dev/null; then
       ok "chezmoi status succeeds"
@@ -462,6 +483,18 @@ check_dotfiles() {
     fi
   else
     fail "chezmoi is missing"
+  fi
+
+  local home_colima_config="$HOME/.colima/default/colima.yaml"
+  if [[ -f "$home_colima_config" ]]; then
+    if colima_config_has_expected_defaults "$home_colima_config"; then
+      ok "Colima Apple Silicon config is applied"
+    else
+      warn "Colima config exists but does not match the managed Apple Silicon defaults"
+      detail "Review ~/.colima/default/colima.yaml or run chezmoi apply."
+    fi
+  else
+    warn "Colima Apple Silicon config is not applied yet; run chezmoi apply"
   fi
 
   local cmd
