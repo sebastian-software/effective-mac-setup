@@ -291,6 +291,8 @@ check_tools() {
   homebrew_tool_ok dockutil dockutil
   homebrew_tool_ok go go
   homebrew_tool_ok rustup rustup
+  homebrew_tool_ok docker docker
+  homebrew_tool_ok colima colima
 
   if brew list --formula trash >/dev/null 2>&1; then
     local trash_prefix trash_path

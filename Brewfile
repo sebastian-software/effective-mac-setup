@@ -86,6 +86,16 @@ brew "go"
 # https://rust-lang.github.io/rustup/
 brew "rustup"
 
+# Docker CLI: command-line client for container workflows; Colima provides the
+# local runtime in this setup instead of Docker Desktop.
+# https://github.com/docker/cli
+brew "docker"
+
+# Colima: lightweight local container runtime for macOS, chosen as the lean
+# CLI-first baseline instead of Docker Desktop.
+# https://github.com/abiosoft/colima
+brew "colima"
+
 # 1Password CLI: exposes `op` for reading secrets into local developer shells
 # without storing plaintext tokens in dotfiles.
 # https://developer.1password.com/docs/cli
