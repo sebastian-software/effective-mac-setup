@@ -128,6 +128,66 @@ cask "firefox"
 # https://www.google.com/chrome/
 cask "google-chrome"
 
+# Affinity: creative design suite for image, vector, and layout work.
+# https://affinity.serif.com/
+cask "affinity"
+
+# Backblaze: cloud backup client for the Mac.
+# https://www.backblaze.com/
+cask "backblaze"
+
+# Claude: Anthropic's desktop app for AI-assisted work.
+# https://claude.ai/download
+cask "claude"
+
+# Codex: OpenAI coding agent desktop app.
+# https://developers.openai.com/codex
+cask "codex"
+
+# Downie: video downloader for supported websites.
+# https://software.charliemonroe.net/downie/
+cask "downie"
+
+# Helium: Chromium-based web browser.
+# https://helium.computer/
+cask "helium-browser"
+
+# IINA: modern macOS media player.
+# https://iina.io/
+cask "iina"
+
+# ImageOptim: image compression utility for smaller assets.
+# https://imageoptim.com/mac
+cask "imageoptim"
+
+# MakeMKV: optical disc backup and conversion utility.
+# https://www.makemkv.com/
+cask "makemkv"
+
+# MoneyMoney: personal finance and banking app.
+# https://moneymoney-app.com/
+cask "moneymoney"
+
+# Ollama: local AI model runner desktop app.
+# https://ollama.com/
+cask "ollama-app"
+
+# Permute: media conversion utility.
+# https://software.charliemonroe.net/permute/
+cask "permute"
+
+# Polypane: browser for responsive and accessibility-focused web testing.
+# https://polypane.app/
+cask "polypane"
+
+# WhatsApp: desktop messaging client.
+# https://www.whatsapp.com/download
+cask "whatsapp"
+
+# Zoom: video meetings and screen sharing.
+# https://zoom.us/download
+cask "zoom"
+
 # Pages: Apple word processor; installed from the Mac App Store.
 # https://apps.apple.com/app/id361309726
 mas "Pages", id: 361309726
@@ -183,3 +243,31 @@ mas "Velja", id: 1607635845
 # Pure Paste: strips formatting from clipboard text; installed from the Mac App Store.
 # https://apps.apple.com/app/id1611378436
 mas "Pure Paste", id: 1611378436
+
+# DaisyDisk: disk usage visualizer and cleanup utility; installed from the Mac App Store.
+# https://apps.apple.com/app/id411643860
+mas "DaisyDisk", id: 411643860
+
+# iA Writer: focused writing app; installed from the Mac App Store.
+# https://apps.apple.com/app/id775737590
+mas "iA Writer", id: 775737590
+
+# PDF Expert: PDF editor and annotation app; installed from the Mac App Store.
+# https://apps.apple.com/app/id1055273043
+mas "PDF Expert", id: 1055273043
+
+# Noizio: ambient sound app; installed from the Mac App Store.
+# https://apps.apple.com/app/id928871589
+mas "Noizio", id: 928871589
+
+# Parcel: delivery tracking app; installed from the Mac App Store.
+# https://apps.apple.com/app/id375589283
+mas "Parcel", id: 375589283
+
+# Redacted: quick screenshot redaction utility; installed from the Mac App Store.
+# https://apps.apple.com/app/id984968384
+mas "Redacted", id: 984968384
+
+# Telegram: desktop messaging client; installed from the Mac App Store.
+# https://apps.apple.com/app/id747648890
+mas "Telegram", id: 747648890
