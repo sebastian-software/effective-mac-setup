@@ -4,3 +4,4 @@
 *.swp
 *.swo
 *.log
+**/.claude/settings.local.json
