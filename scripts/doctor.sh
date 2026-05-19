@@ -477,6 +477,20 @@ check_auth_network() {
       warn "GitHub CLI auth check failed or timed out"
       detail "$(first_line "$LAST_OUTPUT")"
     fi
+
+    if run_with_timeout 8 gh config get git_protocol; then
+      local gh_git_protocol
+      gh_git_protocol="$(first_line "$LAST_OUTPUT")"
+      if [[ "$gh_git_protocol" == "ssh" ]]; then
+        ok "GitHub CLI git protocol is ssh"
+      else
+        warn "GitHub CLI git protocol is ${gh_git_protocol:-unset}, expected ssh"
+        detail "Run: gh config set git_protocol ssh"
+      fi
+    else
+      warn "GitHub CLI git protocol check failed or timed out"
+      detail "$(first_line "$LAST_OUTPUT")"
+    fi
   else
     fail "gh is missing"
   fi
