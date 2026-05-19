@@ -74,6 +74,12 @@ brew "rustup"
 # https://developer.1password.com/docs/cli
 cask "1password-cli"
 
+# 1Password: desktop app required by Git SSH commit signing via op-ssh-sign.
+# Homebrew cask tracks the current 1Password 8 desktop app; the Mac App Store
+# listing is the older 1Password 7 app, so do not replace this with MAS.
+# https://1password.com/downloads/mac
+cask "1password"
+
 # cmux: agent-oriented terminal workspace; tracked from the official Homebrew tap.
 # https://cmux.com/docs/getting-started
 tap "manaflow-ai/cmux"
