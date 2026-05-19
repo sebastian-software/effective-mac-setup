@@ -1,51 +1,60 @@
 # effective-mac-setup
 
-A reproducible, lightweight macOS developer setup for modern Node.js frontend development and common infrastructure tooling.
+An opinionated, reproducible macOS setup for people who want a fast developer
+machine without turning their home directory into a mystery box.
 
-Goal: keep a macOS device fast and lean while still making it ready for modern frontend work with TypeScript, React, Node.js, Go, and Rust.
+It installs a curated set of tools, manages dotfiles with `chezmoi`, keeps common
+shell helpers in `~/.local/bin`, and applies only the macOS defaults that are
+explicitly documented in this repo.
 
-## What This Repo Manages
+The setup is tuned for modern application and frontend-adjacent development:
+Node.js, pnpm, GitHub, Zed, Go, Rust, shell tooling, and a clean terminal
+experience. It is intentionally small enough to understand and fork.
 
-- `Brewfile`: Homebrew formulae, casks, and reviewed Mac App Store apps.
-- `dotfiles/chezmoi`: Git, zsh, fish, and shared shell helper files managed by `chezmoi` in symlink mode.
-- `dotfiles/chezmoi/private_dot_config`: app config such as Starship, Zed, fish, and Ghostty/cmux settings.
-- `macos/defaults.sh`: curated macOS settings that are applied explicitly.
-- `scripts/bootstrap.sh`: first-run helper for Homebrew packages, fnm, Node LTS, Corepack, and pnpm.
-- `scripts/doctor.sh`: compact health check for Brew, dotfiles, runtimes, apps, auth, and MAS.
+## Why This Exists
 
-It intentionally does not manage SSH keys. GitHub SSH auth is handled through the 1Password SSH Agent.
+Fresh Macs are pleasant, but rebuilding the same developer setup by hand is not.
+This repo keeps the important choices in version control:
 
-It also does not store plaintext API tokens. If a CLI needs global environment
-variables, store the secret values in 1Password and map them locally in:
+- which Homebrew tools and apps should be installed
+- which Mac App Store apps are part of the setup
+- which Git, shell, editor, prompt, and terminal settings are managed
+- which macOS defaults are intentional
+- which checks prove the setup is healthy
 
-```text
-~/.config/effective-mac-setup/op-env
-```
+It is not a complete backup of a Mac. It does not dump every preference file, it
+does not store secrets, and it does not try to own the whole machine.
 
-Example:
+## What It Manages
 
-```env
-LINEAR_API_KEY=op://Private/Linear/API Key
-CARGO_REGISTRY_TOKEN=op://Private/Cargo/Registry Token
-```
+- `Brewfile`: Homebrew formulae, casks, taps, and reviewed Mac App Store apps.
+- `dotfiles/chezmoi`: Git, zsh, fish, Starship, Zed, Ghostty/cmux, and shared helper commands.
+- `macos/defaults.sh`: small, named macOS settings that are safe to review before applying.
+- `scripts/bootstrap.sh`: first-run installer for packages, dotfiles, Node LTS, Corepack, and pnpm.
+- `scripts/doctor.sh`: health check for packages, apps, dotfiles, runtimes, auth, MAS, and shell setup.
+- `docs/adr-0001-macos-settings.md`: why macOS settings are curated one by one instead of blindly exported.
 
-`~/.zshrc` and fish load that file with `op read` when it exists. Use
-`op-env-edit` to edit the local mapping and `op-env-load` to reload it in the
-current shell.
+## Design Principles
 
-macOS system settings are not blindly exported. Desired settings should be named, researched, and added one by one; see [ADR 0001](docs/adr-0001-macos-settings.md).
+- Keep the setup readable. Prefer boring files over clever loaders.
+- Track decisions close to the config they affect.
+- Use direct symlinks through `chezmoi` so edits stay visible in this repo.
+- Keep secrets out of Git. Use 1Password for SSH and optional environment variables.
+- Leave zsh as the account login shell, but use fish as the default interactive shell for owned terminals.
+- Make destructive or surprising commands explicit.
+- Treat macOS defaults as code: document the desired behavior, then apply the smallest known setting.
 
-## Fresh Mac
+## Quick Start
 
-### 1. Xcode Command Line Tools
+### 1. Install Xcode Command Line Tools
 
 ```sh
 xcode-select --install
 ```
 
-### 2. Homebrew
+### 2. Install Homebrew
 
-Install Homebrew using the official instructions:
+Follow the official Homebrew instructions:
 
 https://docs.brew.sh/Installation.html
 
@@ -56,26 +65,71 @@ brew --version
 brew doctor
 ```
 
-### 3. Install Packages
+### 3. Clone This Repo
+
+Use your own fork if you want to make this setup personal:
 
 ```sh
-brew bundle --file Brewfile
+mkdir -p ~/Workspace
+git clone git@github.com:sebastian-software/effective-mac-setup.git ~/Workspace/effective-mac-setup
+cd ~/Workspace/effective-mac-setup
 ```
 
-### 4. Configure Dotfiles
-
-This setup uses `chezmoi` with direct symlinks into this repo:
+### 4. Bootstrap the Machine
 
 ```sh
-mkdir -p ~/.config/chezmoi
-cat > ~/.config/chezmoi/chezmoi.toml <<'EOF'
+scripts/bootstrap.sh
+```
+
+This runs `brew bundle`, prepares Node through `fnm`, enables Corepack/pnpm, and
+applies the managed dotfiles with `chezmoi`.
+
+### 5. Review and Apply macOS Defaults
+
+The macOS settings are intentionally separate from the bootstrap step. Read them
+first, then apply them when they match what you want:
+
+```sh
+sed -n '1,240p' macos/defaults.sh
+macos/defaults.sh
+```
+
+This also configures macOS Terminal and cmux/Ghostty to start fish without
+changing the account login shell via `chsh`.
+
+### 6. Run the Doctor
+
+```sh
+scripts/doctor.sh
+```
+
+The doctor prints compact `OK`, `WARN`, and `FAIL` lines. Warnings are useful
+signals, but flaky network, MAS, or auth checks do not fail the run. To re-apply
+safe setup steps, use:
+
+```sh
+scripts/doctor.sh --fix
+```
+
+`--fix` may run `brew bundle`, configure/apply `chezmoi`, install Node LTS
+through `fnm`, create the pnpm global bin directory, and enable Corepack/pnpm.
+It does not apply `macos/defaults.sh` and does not change SSH or 1Password
+configuration.
+
+## Managed Dotfiles
+
+This setup uses `chezmoi` in symlink mode. The source directory is inside this
+repo:
+
+```toml
 sourceDir = "/Users/sebastian/Workspace/effective-mac-setup/dotfiles/chezmoi"
 mode = "symlink"
-EOF
-chezmoi apply
 ```
 
-Managed targets:
+If you fork this repo or clone it somewhere else, adjust `sourceDir` accordingly.
+The bootstrap script writes this config for the current checkout.
+
+Managed targets include:
 
 ```text
 ~/.gitconfig
@@ -89,61 +143,69 @@ Managed targets:
 ~/.zshrc
 ```
 
-### 5. Node LTS
+## Shell Setup
 
-```sh
-fnm install --lts
-fnm default lts-latest
-fnm use lts-latest
-corepack enable
-pnpm --version
+Fish is the default interactive shell for macOS Terminal and cmux. Zsh remains
+the account login shell and fallback.
+
+Shared helper commands live in `~/.local/bin` so zsh, fish, Terminal, cmux, and
+agentic workflows call the same entrypoints. Examples:
+
+```text
+setup-doctor
+repos-update
+repupd
+cleanup-dsstore
+del
+myip
+ports
+flushdns
+op-env-edit
 ```
 
-### 6. macOS Settings
-
-Review the curated settings first, especially mouse speed and Dock items:
+Node is managed by `fnm`. pnpm comes through Corepack. Global pnpm CLIs use:
 
 ```sh
-sed -n '1,220p' macos/defaults.sh
-macos/defaults.sh
+PNPM_HOME=$HOME/Library/pnpm
+PATH=$PNPM_HOME:$PNPM_HOME/bin:$PATH
 ```
 
-This also configures macOS Terminal and cmux/Ghostty to start fish as the
-interactive shell, without changing the account login shell via `chsh`.
+## Secrets and SSH
 
-### 7. Setup Doctor
+This repo intentionally does not manage SSH keys. GitHub SSH auth is expected to
+run through the 1Password SSH Agent.
 
-Run the doctor after bootstrap, after Brewfile changes, or when the shell feels off:
+It also does not store plaintext API tokens. If a CLI needs global environment
+variables, store the values in 1Password and map them locally in:
 
-```sh
-scripts/doctor.sh
+```text
+~/.config/effective-mac-setup/op-env
 ```
 
-It prints compact `OK`, `WARN`, and `FAIL` lines. Warnings such as flaky MAS or network checks do not fail the run. To re-apply the safe setup steps, use:
+Example:
 
-```sh
-scripts/doctor.sh --fix
+```env
+LINEAR_API_KEY=op://Private/Linear/API Key
+CARGO_REGISTRY_TOKEN=op://Private/Cargo/Registry Token
 ```
 
-`--fix` may run `brew bundle`, configure/apply `chezmoi`, install Node LTS through `fnm`, and enable Corepack/pnpm. It does not apply `macos/defaults.sh` and does not change SSH or 1Password configuration.
+Zsh and fish load that file with `op read` when it exists. Use `op-env-edit` to
+edit the local mapping and `op-env-load` to reload it in the current shell.
 
 ## Current Defaults
 
-- Git identity uses GitHub's noreply email address:
-  `swernerx@users.noreply.github.com`
+- Git uses SSH commit signing through 1Password.
 - Node.js is managed through `fnm`, not Homebrew Node.
-- Node.js gets a global 16GB memory ceiling through `NODE_OPTIONS` for large frontend builds, type checks, and code-generation tasks.
+- Node.js gets a global 16GB memory ceiling through `NODE_OPTIONS`.
 - Package manager is `pnpm` through Corepack.
-- pnpm global CLIs use `PNPM_HOME=$HOME/Library/pnpm` with `$PNPM_HOME` and `$PNPM_HOME/bin` in `PATH`.
-- Zsh remains the login/fallback shell.
 - Fish is the default interactive shell for Terminal and cmux.
-- Shared commands live in `~/.local/bin` so zsh, fish, Terminal, cmux, and agentic workflows use the same entrypoints.
-- zoxide provides smart directory jumping for zsh and fish.
-- Editor is Zed; VS Code remains a commented fallback in the Brewfile.
-- Prompt is Starship with a lean managed config.
-- GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and Mac App Store apps are tracked in the Brewfile.
+- Zsh remains the account login shell and fallback.
+- Prompt is Starship.
+- Editor is Zed.
+- zoxide provides smart directory jumping.
+- GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and reviewed Mac App Store apps are tracked in the Brewfile.
 
-## Checks
+## Useful Checks
 
 ```sh
 scripts/doctor.sh
@@ -153,23 +215,34 @@ chezmoi diff
 git config --global --list
 node --version
 pnpm --version
+pnpm bin -g
 go version
 rustc --version
 ```
 
-## Recommended Project Defaults
+## Adapting This For Yourself
 
-- Primary frontend runtime: Node.js LTS via fnm
-- Simple React SPAs: Vite + React + TypeScript
-- Product-like web apps: Next.js App Router
-- Package manager: pnpm via Corepack
-- Tests: Vitest for unit/component tests, Playwright for browser/E2E tests
-- Linting/formatting: ESLint + Prettier
-- Infrastructure-adjacent tooling: Go and Rust via Homebrew/rustup as needed
+Start with these files:
+
+- `Brewfile`: remove apps you do not use and add your own.
+- `dotfiles/chezmoi/dot_gitconfig`: change identity, signing, and aliases.
+- `dotfiles/chezmoi/private_dot_config/fish/config.fish`: adjust shell defaults.
+- `dotfiles/chezmoi/private_dot_config/ghostty/config`: adjust cmux/Ghostty behavior.
+- `macos/defaults.sh`: review every setting before applying it.
+
+Good first customizations:
+
+- Replace the Git identity and signing key.
+- Review Mac App Store entries.
+- Adjust Dock items in `macos/defaults.sh`.
+- Decide whether Chrome, Firefox, cmux, Zed, Go, and Rust fit your workflow.
+- Add or remove shell helpers in `dotfiles/chezmoi/private_dot_local/bin`.
 
 ## Still Manual
 
-- Verify the 1Password SSH Agent in a normal terminal:
+- Sign in to 1Password and enable the SSH Agent.
+- Sign in to GitHub CLI with `gh auth login`.
+- Verify GitHub SSH auth in a normal terminal:
   `ssh -T git@github.com`
-- Re-run `mas list` on a stable connection and compare it with the Brewfile.
-- Decide whether OrbStack, VS Code, or API/database GUI tools are actually needed.
+- Sign in to the Mac App Store before relying on MAS checks.
+- Re-run `scripts/doctor.sh` after changing packages, dotfiles, or macOS defaults.
