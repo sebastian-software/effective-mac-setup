@@ -15,6 +15,23 @@ Goal: keep a macOS device fast and lean while still making it ready for modern f
 
 It intentionally does not manage SSH keys. GitHub SSH auth is handled through the 1Password SSH Agent.
 
+It also does not store plaintext API tokens. If a CLI needs global environment
+variables, store the secret values in 1Password and map them locally in:
+
+```text
+~/.config/effective-mac-setup/op-env
+```
+
+Example:
+
+```env
+LINEAR_API_KEY=op://Private/Linear/API Key
+CARGO_REGISTRY_TOKEN=op://Private/Cargo/Registry Token
+```
+
+`~/.zshrc` loads that file with `op read` when it exists. Use `op-env-edit` to
+edit the local mapping and `op-env-load` to reload it in the current shell.
+
 macOS system settings are not blindly exported. Desired settings should be named, researched, and added one by one; see [ADR 0001](docs/adr-0001-macos-settings.md).
 
 ## Fresh Mac
@@ -108,6 +125,7 @@ scripts/doctor.sh --fix
 - Git identity uses GitHub's noreply email address:
   `swernerx@users.noreply.github.com`
 - Node.js is managed through `fnm`, not Homebrew Node.
+- Node.js gets a global 16GB memory ceiling through `NODE_OPTIONS` for large frontend builds, type checks, and code-generation tasks.
 - Package manager is `pnpm` through Corepack.
 - Editor is Zed; VS Code remains a commented fallback in the Brewfile.
 - Prompt is Starship with a lean managed config.

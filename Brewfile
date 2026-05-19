@@ -60,6 +60,11 @@ brew "go"
 # https://rust-lang.github.io/rustup/
 brew "rustup"
 
+# 1Password CLI: exposes `op` for reading secrets into local developer shells
+# without storing plaintext tokens in dotfiles.
+# https://developer.1password.com/docs/cli
+cask "1password-cli"
+
 # GitHub Desktop: visual Git/GitHub client for repo review and occasional GUI workflows.
 # https://desktop.github.com/
 cask "github"

@@ -10,6 +10,15 @@ eval "$(fnm env --use-on-cd --shell zsh)"
 export EDITOR="zed --wait"
 export VISUAL="zed --wait"
 
+# Prefer a German UTF-8 locale for CLI tools while keeping the setting explicit
+# and reproducible across fresh Macs.
+export LANG="de_DE.UTF-8"
+export LC_ALL="de_DE.UTF-8"
+
+# Give memory-hungry Node.js tools more headroom globally for large frontend
+# builds, type checks, and code-generation tasks.
+export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--max-old-space-size=16384"
+
 # Go tools installed with "go install" land in GOBIN. Keep this explicit so
 # project CLIs are available on fresh machines.
 export GOPATH="${GOPATH:-$HOME/go}"
@@ -99,6 +108,31 @@ clonecd() {
   gh repo clone "$repo" && cd "$dir"
 }
 
+repos-update() {
+  local root="${1:-.}"
+  local current_dir="$PWD"
+  local repo
+
+  find "$root" -maxdepth 4 -type d -name .git -prune -print | sort | while IFS= read -r repo; do
+    local worktree="${repo:h}"
+    printf -- '- Updating: %s\n' "${worktree#$root/}"
+
+    if ! git -C "$worktree" diff --quiet || ! git -C "$worktree" diff --cached --quiet; then
+      printf '  skipped: working tree has local changes\n' >&2
+      continue
+    fi
+
+    git -C "$worktree" pull --ff-only
+  done
+
+  cd "$current_dir"
+}
+
+# Backward-compatible muscle-memory alias from the previous setup.
+repupd() {
+  repos-update "$@"
+}
+
 # Dotfile and package-management checks. Mutating commands like "chezmoi apply"
 # and "brew bundle dump" stay intentionally explicit.
 alias czs='chezmoi status'
@@ -154,13 +188,24 @@ alias gor='go run .'
 alias cc='cargo check'
 alias ct='cargo test'
 alias cr='cargo run'
+alias run='npm run -s'
 alias ni='npm install'
 alias nci='npm ci'
 alias nr='npm run'
 alias nt='npm test'
+alias rgr='rg -L'
 
-# 1Password / SSH diagnostics. The actual SSH agent integration remains managed
-# by 1Password; these helpers only inspect or verify the current shell state.
+# 1Password / SSH diagnostics and optional secret-backed environment variables.
+# The actual SSH agent integration remains managed by 1Password.
+#
+# To expose selected secrets as global environment variables, create a local
+# file at ~/.config/effective-mac-setup/op-env with lines like:
+#
+#   LINEAR_API_KEY=op://Private/Linear/API Key
+#
+# The file is intentionally not managed by this repo. Loading secrets into the
+# global shell environment is convenient for direct CLI tools, but child
+# processes can read their parent's environment, so only load what you need.
 op-accounts() {
   command -v op >/dev/null 2>&1 || {
     echo "1Password CLI is not installed." >&2
@@ -178,6 +223,68 @@ op-whoami() {
 
   op whoami
 }
+
+op-env-load() {
+  local quiet=false
+  if [[ "${1:-}" == "--quiet" ]]; then
+    quiet=true
+    shift
+  fi
+
+  local env_file="${1:-${OP_ENV_FILE:-$HOME/.config/effective-mac-setup/op-env}}"
+  [[ -r "$env_file" ]] || return 0
+
+  command -v op >/dev/null 2>&1 || {
+    $quiet || echo "1Password CLI is not installed." >&2
+    return 127
+  }
+
+  local loaded=0
+  local failed=0
+  local line name ref value
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    [[ "$line" == *"="* ]] || continue
+
+    name="${line%%=*}"
+    ref="${line#*=}"
+    name="${name//[[:space:]]/}"
+
+    if [[ ! "$name" =~ '^[A-Za-z_][A-Za-z0-9_]*$' ]]; then
+      $quiet || echo "Skipping invalid environment variable name: $name" >&2
+      failed=$((failed + 1))
+      continue
+    fi
+
+    if value="$(op read "$ref" 2>/dev/null)"; then
+      export "$name=$value"
+      loaded=$((loaded + 1))
+    else
+      $quiet || echo "Could not read 1Password secret for $name" >&2
+      failed=$((failed + 1))
+    fi
+  done < "$env_file"
+
+  $quiet || echo "Loaded $loaded 1Password-backed environment variables from $env_file."
+  [[ "$failed" -eq 0 ]]
+}
+
+op-env-edit() {
+  local env_file="${OP_ENV_FILE:-$HOME/.config/effective-mac-setup/op-env}"
+  mkdir -p "${env_file:h}"
+  if [[ -n "${EDITOR:-}" ]]; then
+    ${(z)EDITOR} "$env_file"
+  else
+    zed --wait "$env_file"
+  fi
+}
+
+# Auto-load only when the local mapping file exists. Set OP_ENV_AUTO_LOAD=0 to
+# disable this for a shell session.
+if [[ "${OP_ENV_AUTO_LOAD:-1}" != "0" ]]; then
+  op-env-load --quiet
+fi
 
 ssh-agent-info() {
   echo "SSH_AUTH_SOCK=${SSH_AUTH_SOCK:-}"
