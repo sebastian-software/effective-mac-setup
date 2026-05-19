@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>effective-mac-setup</title>
+    <meta
+      name="description"
+      content="An opinionated, reproducible macOS setup for developers who want a fast machine without turning their home directory into a mystery box."
+    >
+    <meta property="og:title" content="effective-mac-setup">
+    <meta
+      property="og:description"
+      content="A clear, forkable macOS developer setup built from Homebrew, chezmoi, reviewed defaults, and health checks."
+    >
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="effective-mac-setup home">
+          effective-mac-setup
+        </a>
+        <div class="nav-links">
+          <a href="#why">Why</a>
+          <a href="#manages">Manages</a>
+          <a href="#tools">Tools</a>
+          <a href="#start">Start</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Reproducible macOS setup</p>
+          <h1 id="hero-title">A developer Mac that stays understandable.</h1>
+          <p class="hero-text">
+            <code>effective-mac-setup</code> is an opinionated, forkable
+            baseline for people who want a fast developer machine without
+            turning their home directory into a mystery box.
+          </p>
+          <div class="actions" aria-label="Project links">
+            <a class="button primary" href="https://github.com/sebastian-software/effective-mac-setup">
+              View on GitHub
+            </a>
+            <a class="button secondary" href="https://github.com/sebastian-software/effective-mac-setup#quick-start">
+              Read the quick start
+            </a>
+          </div>
+        </div>
+        <aside class="signal-panel" aria-label="Setup summary">
+          <div class="terminal-bar" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <dl>
+            <div>
+              <dt>Packages</dt>
+              <dd>Homebrew formulae, casks, and reviewed App Store apps</dd>
+            </div>
+            <div>
+              <dt>Dotfiles</dt>
+              <dd>chezmoi in symlink mode, with visible source files</dd>
+            </div>
+            <div>
+              <dt>Checks</dt>
+              <dd>Bootstrap once, then use the doctor to keep drift obvious</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="section split" id="why" aria-labelledby="why-title">
+        <div>
+          <p class="section-label">Why it exists</p>
+          <h2 id="why-title">Fresh Macs are pleasant. Rebuilding them by hand is not.</h2>
+        </div>
+        <div class="copy-block">
+          <p>
+            This setup keeps the important choices in version control: which
+            tools are installed, which shell and editor settings are managed,
+            which defaults are intentional, and which checks prove the machine
+            is healthy.
+          </p>
+          <p>
+            It is small on purpose. The point is not to capture every preference
+            a Mac has ever written. The point is to make the useful parts
+            reviewable, repeatable, and easy to adapt.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="manages" aria-labelledby="manages-title">
+        <p class="section-label">What it manages</p>
+        <h2 id="manages-title">The setup owns the pieces that benefit from being explicit.</h2>
+        <div class="feature-grid">
+          <article>
+            <h3>Packages and apps</h3>
+            <p>
+              A curated <code>Brewfile</code> installs command-line tools,
+              desktop apps, and Mac App Store entries with comments explaining
+              the choice.
+            </p>
+          </article>
+          <article>
+            <h3>Dotfiles</h3>
+            <p>
+              Git, zsh, fish, Starship, Zed, Ghostty, Colima, and shared helper
+              commands are managed through <code>chezmoi</code>.
+            </p>
+          </article>
+          <article>
+            <h3>macOS defaults</h3>
+            <p>
+              System settings live in a small reviewed script, documented next
+              to the command that applies each behavior.
+            </p>
+          </article>
+          <article>
+            <h3>Bootstrap and doctor</h3>
+            <p>
+              The bootstrap gets a new machine started. The doctor checks
+              packages, runtimes, auth, dotfiles, and shell setup afterward.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section contrast" aria-labelledby="avoids-title">
+        <div class="split">
+          <div>
+            <p class="section-label">What it avoids</p>
+            <h2 id="avoids-title">Not everything belongs in Git.</h2>
+          </div>
+          <ul class="plain-list">
+            <li>No secrets or plaintext API tokens.</li>
+            <li>No blind dumps of macOS preference files.</li>
+            <li>No attempt to back up the whole machine.</li>
+            <li>No surprise changes to account login shell or private state.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="principles-title">
+        <p class="section-label">Principles</p>
+        <h2 id="principles-title">Readable choices beat clever automation.</h2>
+        <div class="principles">
+          <p>Prefer boring files over hidden loaders.</p>
+          <p>Track decisions close to the config they affect.</p>
+          <p>Make destructive or surprising commands explicit.</p>
+          <p>Treat macOS defaults as reviewed code.</p>
+        </div>
+      </section>
+
+      <section class="section" id="tools" aria-labelledby="tools-title">
+        <p class="section-label">Tooling overview</p>
+        <h2 id="tools-title">A compact baseline for modern application work.</h2>
+        <div class="tool-grid">
+          <article>
+            <h3>Development</h3>
+            <p>Git, Git LFS, GitHub CLI, GitHub Desktop, Zed, Go, Rust, Codex.</p>
+          </article>
+          <article>
+            <h3>Shell and CLI</h3>
+            <p>fish, Starship, zoxide, ripgrep, fd, jq, bat, eza, Semgrep.</p>
+          </article>
+          <article>
+            <h3>Runtime and containers</h3>
+            <p>fnm, Corepack, pnpm, Docker CLI, and Colima as the local runtime.</p>
+          </article>
+          <article>
+            <h3>Browsers and testing</h3>
+            <p>Firefox, Chrome, Helium, Polypane, and Velja for link routing.</p>
+          </article>
+          <article>
+            <h3>AI and agents</h3>
+            <p>Codex, Claude, Ollama, cmux, and a terminal setup that keeps them usable.</p>
+          </article>
+          <article>
+            <h3>Daily Mac work</h3>
+            <p>1Password, Backblaze, Tailscale, writing tools, media utilities, and office apps.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section start" id="start" aria-labelledby="start-title">
+        <div>
+          <p class="section-label">Start here</p>
+          <h2 id="start-title">Fork it, review it, then let the scripts do the boring parts.</h2>
+        </div>
+        <ol class="steps">
+          <li>
+            <span>1</span>
+            <p>Install Xcode Command Line Tools and Homebrew.</p>
+          </li>
+          <li>
+            <span>2</span>
+            <p>Clone your fork and run <code>scripts/bootstrap.sh</code>.</p>
+          </li>
+          <li>
+            <span>3</span>
+            <p>
+              Review <code>macos/defaults.sh</code>, apply it when it fits,
+              then run <code>scripts/doctor.sh</code>.
+            </p>
+          </li>
+        </ol>
+        <a class="text-link" href="https://github.com/sebastian-software/effective-mac-setup#quick-start">
+          Open the full quick start in the README
+        </a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Built as a readable front door for
+        <a href="https://github.com/sebastian-software/effective-mac-setup">effective-mac-setup</a>.
+      </p>
+    </footer>
+  </body>
+</html>
