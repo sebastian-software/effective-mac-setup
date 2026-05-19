@@ -119,6 +119,39 @@ warn_command_missing() {
   fi
 }
 
+homebrew_tool_ok() {
+  local formula="$1"
+  local cmd="$2"
+
+  if ! brew list --formula "$formula" >/dev/null 2>&1; then
+    fail "$formula Homebrew formula is missing"
+    if command -v "$cmd" >/dev/null 2>&1; then
+      detail "$cmd resolves to $(command -v "$cmd"), but the Brewfile-managed formula is not installed."
+    fi
+    return
+  fi
+
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    fail "$cmd is missing, though $formula Homebrew formula is installed"
+    return
+  fi
+
+  local cmd_path homebrew_prefix formula_prefix
+  cmd_path="$(command -v "$cmd")"
+  homebrew_prefix="$(brew --prefix)"
+  formula_prefix="$(brew --prefix "$formula" 2>/dev/null || true)"
+
+  if [[ "$cmd_path" == "$homebrew_prefix/bin/"* ||
+      "$cmd_path" == "$homebrew_prefix/sbin/"* ||
+      ( -n "$formula_prefix" && "$cmd_path" == "$formula_prefix/bin/"* ) ||
+      ( -n "$formula_prefix" && "$cmd_path" == "$formula_prefix/sbin/"* ) ]]; then
+    ok "$cmd is available from Homebrew ($cmd_path)"
+  else
+    warn "$cmd resolves outside Homebrew ($cmd_path)"
+    detail "$formula Homebrew formula is installed, but PATH prefers another command."
+  fi
+}
+
 app_ok() {
   local name="$1"
   local path="$2"
@@ -209,19 +242,44 @@ check_homebrew() {
 
 check_tools() {
   section "Core tools"
-  local tool
-  for tool in git gh fnm starship fish zoxide rg fd jq bat eza mas chezmoi dockutil go rustup; do
-    command_ok "$tool"
-  done
+  if ! command -v brew >/dev/null 2>&1; then
+    fail "Homebrew is missing; cannot validate Brewfile-managed tools"
+    return
+  fi
+
+  homebrew_tool_ok git git
+  homebrew_tool_ok gh gh
+  homebrew_tool_ok fnm fnm
+  homebrew_tool_ok starship starship
+  homebrew_tool_ok fish fish
+  homebrew_tool_ok zoxide zoxide
+  homebrew_tool_ok ripgrep rg
+  homebrew_tool_ok fd fd
+  homebrew_tool_ok jq jq
+  homebrew_tool_ok bat bat
+  homebrew_tool_ok eza eza
+  homebrew_tool_ok mas mas
+  homebrew_tool_ok chezmoi chezmoi
+  homebrew_tool_ok dockutil dockutil
+  homebrew_tool_ok go go
+  homebrew_tool_ok rustup rustup
 
   if brew list --formula trash >/dev/null 2>&1; then
-    ok "trash Homebrew formula is installed"
-  elif [[ -x /opt/homebrew/opt/trash/bin/trash ]]; then
-    ok "trash CLI is available from Homebrew keg"
+    local trash_prefix trash_path
+    trash_prefix="$(brew --prefix trash 2>/dev/null || true)"
+    trash_path="${trash_prefix:-$(brew --prefix)/opt/trash}/bin/trash"
+    if [[ -x "$trash_path" ]]; then
+      ok "trash CLI is available from Homebrew keg ($trash_path)"
+    elif command -v trash >/dev/null 2>&1; then
+      warn "trash resolves to $(command -v trash), but the Homebrew keg binary was not found"
+    else
+      fail "trash CLI is missing, though trash Homebrew formula is installed"
+    fi
   elif command -v trash >/dev/null 2>&1; then
-    warn "trash command exists, but Homebrew trash formula was not found"
+    fail "trash Homebrew formula is missing"
+    detail "trash resolves to $(command -v trash), but the Brewfile-managed formula is not installed."
   else
-    fail "trash CLI is missing"
+    fail "trash Homebrew formula is missing"
   fi
 }
 
