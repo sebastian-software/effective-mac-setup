@@ -148,7 +148,7 @@ cask "codex"
 # https://software.charliemonroe.net/downie/
 cask "downie"
 
-# Helium: floating browser window for picture-in-picture style workflows.
+# Helium: Chromium-based web browser.
 # https://helium.computer/
 cask "helium-browser"
 
