@@ -162,6 +162,30 @@ app_ok() {
   fi
 }
 
+default_value_ok() {
+  local domain="$1"
+  local key="$2"
+  local expected="$3"
+  local label="$4"
+  local actual
+
+  if actual="$(defaults read "$domain" "$key" 2>/dev/null)"; then
+    actual="$(first_line "$actual")"
+    if [[ "$actual" == "$expected" ]]; then
+      ok "$label matches curated default"
+    else
+      warn "$label differs from curated default"
+      detail "Expected: $expected"
+      detail "Actual: $actual"
+      detail "Review and run macos/defaults.sh manually."
+    fi
+  else
+    warn "$label is not set"
+    detail "Expected: $expected"
+    detail "Review and run macos/defaults.sh manually."
+  fi
+}
+
 section() {
   printf '\n==> %s\n' "$1"
 }
@@ -296,6 +320,28 @@ check_apps() {
   else
     warn "Zed CLI is missing; install it from Zed if needed"
   fi
+}
+
+check_macos_defaults() {
+  section "macOS defaults"
+  if ! command -v defaults >/dev/null 2>&1; then
+    warn "defaults command is missing; cannot check curated macOS defaults"
+    return
+  fi
+
+  default_value_ok -g com.apple.mouse.scaling "2.5" "Mouse tracking speed"
+  default_value_ok com.apple.dock show-recents "0" "Dock recent apps"
+  default_value_ok com.apple.dock tilesize "45" "Dock tile size"
+  default_value_ok com.apple.screencapture location "$HOME/Desktop/Screenshots" "Screenshot location"
+  default_value_ok com.apple.screencapture disable-shadow "1" "Screenshot window shadow"
+  default_value_ok -g AppleShowAllExtensions "1" "Visible file extensions"
+  default_value_ok com.apple.finder FXEnableExtensionChangeWarning "0" "Finder extension-change warning"
+  default_value_ok com.apple.finder NewWindowTarget "PfHm" "Finder new-window target"
+  default_value_ok com.apple.finder NewWindowTargetPath "file://$HOME/" "Finder new-window path"
+  default_value_ok -g KeyRepeat "2" "Keyboard repeat"
+  default_value_ok -g InitialKeyRepeat "15" "Initial keyboard repeat"
+  default_value_ok com.apple.finder FXICloudDriveDesktop "1" "iCloud Desktop"
+  default_value_ok com.apple.finder FXICloudDriveDocuments "1" "iCloud Documents"
 }
 
 check_editor_prompt() {
@@ -560,6 +606,7 @@ fi
 check_homebrew
 check_tools
 check_apps
+check_macos_defaults
 check_editor_prompt
 check_dotfiles
 check_languages
