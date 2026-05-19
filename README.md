@@ -206,7 +206,7 @@ edit the local mapping and `op-env-load` to reload it in the current shell.
 - zoxide provides smart directory jumping.
 - Git LFS, hyperfine, wget, and Semgrep are tracked as useful baseline CLI tools.
 - Containers use the Docker CLI with Colima as the lightweight local runtime.
-- Colima is configured for Apple Silicon with VZ, virtiofs, Docker runtime, BuildKit, and a writable `~/Workspace` mount.
+- Colima is configured for native Apple Silicon with VZ, virtiofs, Docker runtime, BuildKit, no default amd64 emulation, and a writable `~/Workspace` mount.
 - GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and reviewed Mac App Store apps are tracked in the Brewfile.
 
 ## Useful Checks

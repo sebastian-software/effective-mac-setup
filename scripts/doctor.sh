@@ -353,11 +353,13 @@ check_macos_defaults() {
 colima_config_has_expected_defaults() {
   local config="$1"
 
-  grep -q '^arch: host$' "$config" &&
+  grep -q '^arch: aarch64$' "$config" &&
     grep -q '^runtime: docker$' "$config" &&
     grep -q '^vmType: vz$' "$config" &&
     grep -q '^mountType: virtiofs$' "$config" &&
-    grep -q '^rosetta: true$' "$config" &&
+    grep -q '^rosetta: false$' "$config" &&
+    grep -q '^binfmt: false$' "$config" &&
+    grep -q '^mountInotify: false$' "$config" &&
     grep -q '^autoActivate: true$' "$config" &&
     grep -q '^  - location: ~/Workspace$' "$config" &&
     grep -q '^    buildkit: true$' "$config"

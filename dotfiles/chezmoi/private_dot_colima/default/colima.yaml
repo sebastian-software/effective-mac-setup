@@ -8,14 +8,19 @@ cpu: 4
 memory: 8
 disk: 100
 
-arch: host
+arch: aarch64
 runtime: docker
 vmType: vz
 mountType: virtiofs
 
-# Keep native ARM images as the default path, but allow amd64 images through
-# Rosetta when projects still depend on them.
-rosetta: true
+# Keep the default profile native ARM. Avoid Rosetta and binfmt so amd64 images
+# do not run accidentally; use a separate Colima profile for explicit emulation.
+rosetta: false
+binfmt: false
+
+# File event forwarding is experimental. Enable it only if a containerized
+# watcher/hot-reload workflow needs it.
+mountInotify: false
 
 autoActivate: true
 
