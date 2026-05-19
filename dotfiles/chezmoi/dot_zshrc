@@ -1,9 +1,10 @@
 # Keep PATH entries unique when this file is sourced repeatedly during dotfile
 # work. This mirrors the small-shell-helper style seen in holman/dotfiles.
 typeset -U path PATH
+path=("$HOME/.local/bin" $path)
 
 # Node.js versions are managed by fnm instead of Homebrew Node.
-eval "$(fnm env --use-on-cd --shell zsh)"
+command -v fnm >/dev/null 2>&1 && eval "$(fnm env --use-on-cd --shell zsh)"
 
 # Zed is the primary editor here. "--wait" keeps Git and other CLI tools from
 # continuing before the editor window is closed.
@@ -50,18 +51,15 @@ alias ll='eza -la --git'
 alias la='eza -a'
 alias search='rg'
 
-# Filesystem helpers. Keep destructive operations explicit: rm/cp/mv are not
-# aliased. cleanup-dsstore is a macOS staple as seen in mathiasbynens/dotfiles.
+# Filesystem helpers. Shell-neutral commands such as cleanup-dsstore, del,
+# myip, ports, flushdns, repos-update, and setup-doctor live in ~/.local/bin so
+# zsh, fish, cmux, Terminal, and agentic workflows all call the same entrypoint.
 alias mkdir='mkdir -p'
 alias dfh='df -h'
 alias duh='du -h'
 
 ducks() {
   du -cksh -- ./*(N) ./.*(N) 2>/dev/null | sort -hr | head -n 20
-}
-
-cleanup-dsstore() {
-  find "${1:-.}" -name .DS_Store -type f -delete
 }
 
 # Git shortcuts. Short shell aliases are intentionally kept close to common
@@ -108,78 +106,11 @@ clonecd() {
   gh repo clone "$repo" && cd "$dir"
 }
 
-repos-update() {
-  local root="${1:-.}"
-  local current_dir="$PWD"
-  local repo
-
-  find "$root" -maxdepth 4 -type d -name .git -prune -print | sort | while IFS= read -r repo; do
-    local worktree="${repo:h}"
-    printf -- '- Updating: %s\n' "${worktree#$root/}"
-
-    if ! git -C "$worktree" diff --quiet || ! git -C "$worktree" diff --cached --quiet; then
-      printf '  skipped: working tree has local changes\n' >&2
-      continue
-    fi
-
-    git -C "$worktree" pull --ff-only
-  done
-
-  cd "$current_dir"
-}
-
-# Backward-compatible muscle-memory alias from the previous setup.
-repupd() {
-  repos-update "$@"
-}
-
 # Dotfile and package-management checks. Mutating commands like "chezmoi apply"
 # and "brew bundle dump" stay intentionally explicit.
 alias czs='chezmoi status'
 alias czd='chezmoi diff'
 alias brewc='brew bundle check --no-upgrade --file Brewfile'
-
-setup-doctor() {
-  local setup_repo="${EFFECTIVE_MAC_SETUP:-$HOME/Workspace/effective-mac-setup}"
-  if [[ ! -x "$setup_repo/scripts/doctor.sh" ]]; then
-    echo "setup doctor not found at $setup_repo/scripts/doctor.sh" >&2
-    return 127
-  fi
-
-  "$setup_repo/scripts/doctor.sh" "$@"
-}
-
-# Trash workflow. Inspired by dotfiles that avoid making rm safer by surprise:
-# keep rm untouched and expose an explicit "move to Trash" command instead.
-del() {
-  local trash_cmd
-  if [[ -x /opt/homebrew/opt/trash/bin/trash ]]; then
-    trash_cmd="/opt/homebrew/opt/trash/bin/trash"
-  elif command -v trash >/dev/null 2>&1; then
-    trash_cmd="trash"
-  else
-    echo "trash CLI is not installed. Run: brew bundle --file Brewfile" >&2
-    return 127
-  fi
-
-  "$trash_cmd" "$@"
-}
-
-# Small network diagnostics, as commonly seen in paulirish/dotfiles-style
-# helper sets. Commands are explicit because some reach outside the machine.
-myip() {
-  curl -fsSL https://ifconfig.me
-  echo
-}
-
-ports() {
-  lsof -nP -iTCP -sTCP:LISTEN "$@"
-}
-
-flushdns() {
-  sudo dscacheutil -flushcache
-  sudo killall -HUP mDNSResponder
-}
 
 # Language workflow aliases for the current Go/Rust/Node setup.
 alias gob='go build ./...'
@@ -270,16 +201,6 @@ op-env-load() {
   [[ "$failed" -eq 0 ]]
 }
 
-op-env-edit() {
-  local env_file="${OP_ENV_FILE:-$HOME/.config/effective-mac-setup/op-env}"
-  mkdir -p "${env_file:h}"
-  if [[ -n "${EDITOR:-}" ]]; then
-    ${(z)EDITOR} "$env_file"
-  else
-    zed --wait "$env_file"
-  fi
-}
-
 # Auto-load only when the local mapping file exists. Set OP_ENV_AUTO_LOAD=0 to
 # disable this for a shell session.
 if [[ "${OP_ENV_AUTO_LOAD:-1}" != "0" ]]; then
@@ -295,4 +216,5 @@ gh-ssh-test() {
   ssh -T git@github.com
 }
 
-eval "$(starship init zsh)"
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"

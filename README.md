@@ -7,8 +7,8 @@ Goal: keep a macOS device fast and lean while still making it ready for modern f
 ## What This Repo Manages
 
 - `Brewfile`: Homebrew formulae, casks, and reviewed Mac App Store apps.
-- `dotfiles/chezmoi`: Git and zsh dotfiles managed by `chezmoi` in symlink mode.
-- `dotfiles/chezmoi/private_dot_config`: app config such as Starship and Zed settings.
+- `dotfiles/chezmoi`: Git, zsh, fish, and shared shell helper files managed by `chezmoi` in symlink mode.
+- `dotfiles/chezmoi/private_dot_config`: app config such as Starship, Zed, fish, and Ghostty/cmux settings.
 - `macos/defaults.sh`: curated macOS settings that are applied explicitly.
 - `scripts/bootstrap.sh`: first-run helper for Homebrew packages, fnm, Node LTS, Corepack, and pnpm.
 - `scripts/doctor.sh`: compact health check for Brew, dotfiles, runtimes, apps, auth, and MAS.
@@ -29,8 +29,9 @@ LINEAR_API_KEY=op://Private/Linear/API Key
 CARGO_REGISTRY_TOKEN=op://Private/Cargo/Registry Token
 ```
 
-`~/.zshrc` loads that file with `op read` when it exists. Use `op-env-edit` to
-edit the local mapping and `op-env-load` to reload it in the current shell.
+`~/.zshrc` and fish load that file with `op read` when it exists. Use
+`op-env-edit` to edit the local mapping and `op-env-load` to reload it in the
+current shell.
 
 macOS system settings are not blindly exported. Desired settings should be named, researched, and added one by one; see [ADR 0001](docs/adr-0001-macos-settings.md).
 
@@ -79,8 +80,11 @@ Managed targets:
 ```text
 ~/.gitconfig
 ~/.gitignore_global
+~/.config/fish/config.fish
+~/.config/ghostty/config
 ~/.config/starship.toml
 ~/.config/zed/settings.json
+~/.local/bin
 ~/.zprofile
 ~/.zshrc
 ```
@@ -103,6 +107,9 @@ Review the curated settings first, especially mouse speed and Dock items:
 sed -n '1,220p' macos/defaults.sh
 macos/defaults.sh
 ```
+
+This also configures macOS Terminal and cmux/Ghostty to start fish as the
+interactive shell, without changing the account login shell via `chsh`.
 
 ### 7. Setup Doctor
 
@@ -127,9 +134,13 @@ scripts/doctor.sh --fix
 - Node.js is managed through `fnm`, not Homebrew Node.
 - Node.js gets a global 16GB memory ceiling through `NODE_OPTIONS` for large frontend builds, type checks, and code-generation tasks.
 - Package manager is `pnpm` through Corepack.
+- Zsh remains the login/fallback shell.
+- Fish is the interactive Terminal/cmux shell trial.
+- Shared commands live in `~/.local/bin` so zsh, fish, Terminal, cmux, and agentic workflows use the same entrypoints.
+- zoxide provides smart directory jumping for zsh and fish; fzf is intentionally not part of this first shell block.
 - Editor is Zed; VS Code remains a commented fallback in the Brewfile.
 - Prompt is Starship with a lean managed config.
-- GitHub Desktop, Firefox, Chrome, Go, Rust, and Mac App Store apps are tracked in the Brewfile.
+- GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and Mac App Store apps are tracked in the Brewfile.
 
 ## Checks
 

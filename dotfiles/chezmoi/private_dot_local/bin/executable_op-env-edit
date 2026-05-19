@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+env_file="${OP_ENV_FILE:-$HOME/.config/effective-mac-setup/op-env}"
+mkdir -p "$(dirname "$env_file")"
+
+if [[ -n "${VISUAL:-}" ]]; then
+  read -r -a editor_cmd <<< "$VISUAL"
+elif [[ -n "${EDITOR:-}" ]]; then
+  read -r -a editor_cmd <<< "$EDITOR"
+else
+  editor_cmd=(zed --wait)
+fi
+
+exec "${editor_cmd[@]}" "$env_file"

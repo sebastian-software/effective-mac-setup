@@ -14,6 +14,15 @@ brew "fnm"
 # https://starship.rs/
 brew "starship"
 
+# fish: interactive shell trial for Terminal and cmux; zsh remains the login
+# and fallback shell.
+# https://fishshell.com/
+brew "fish"
+
+# zoxide: smart directory jumper that works across fish, zsh, and scripts.
+# https://github.com/ajeetdsouza/zoxide
+brew "zoxide"
+
 # ripgrep: very fast recursive search; preferred over grep for codebases.
 # https://github.com/BurntSushi/ripgrep
 brew "ripgrep"
@@ -64,6 +73,11 @@ brew "rustup"
 # without storing plaintext tokens in dotfiles.
 # https://developer.1password.com/docs/cli
 cask "1password-cli"
+
+# cmux: agent-oriented terminal workspace; tracked from the official Homebrew tap.
+# https://cmux.com/docs/getting-started
+tap "manaflow-ai/cmux"
+cask "cmux"
 
 # GitHub Desktop: visual Git/GitHub client for repo review and occasional GUI workflows.
 # https://desktop.github.com/

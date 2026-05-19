@@ -206,7 +206,7 @@ check_homebrew() {
 check_tools() {
   section "Core tools"
   local tool
-  for tool in git gh fnm starship rg fd jq bat eza mas chezmoi dockutil go rustup; do
+  for tool in git gh fnm starship fish zoxide rg fd jq bat eza mas chezmoi dockutil go rustup; do
     command_ok "$tool"
   done
 
@@ -227,6 +227,7 @@ check_apps() {
   app_ok "Zed" "/Applications/Zed.app"
   app_ok "Firefox" "/Applications/Firefox.app"
   app_ok "Google Chrome" "/Applications/Google Chrome.app"
+  app_ok "cmux" "/Applications/cmux.app"
 
   if command -v zed >/dev/null 2>&1; then
     ok "Zed CLI is available"
@@ -236,9 +237,11 @@ check_apps() {
 }
 
 check_editor_prompt() {
-  section "Editor and prompt"
+  section "Editor, prompt, and shells"
   local starship_config="$repo_root/dotfiles/chezmoi/private_dot_config/starship.toml"
   local zed_settings="$repo_root/dotfiles/chezmoi/private_dot_config/zed/settings.json"
+  local fish_config="$repo_root/dotfiles/chezmoi/private_dot_config/fish/config.fish"
+  local ghostty_config="$repo_root/dotfiles/chezmoi/private_dot_config/ghostty/config"
 
   if [[ -f "$starship_config" ]]; then
     if STARSHIP_CONFIG="$starship_config" starship print-config >/dev/null 2>&1; then
@@ -255,6 +258,40 @@ check_editor_prompt() {
   else
     fail "Zed settings are missing or empty"
   fi
+
+  if [[ -f "$fish_config" ]]; then
+    if command -v fish >/dev/null 2>&1; then
+      if fish --no-config --command "source '$fish_config'" >/dev/null 2>&1; then
+        ok "fish config parses"
+      else
+        fail "fish config does not parse"
+      fi
+    else
+      fail "fish is missing; cannot parse fish config"
+    fi
+  else
+    fail "fish config is missing"
+  fi
+
+  if [[ -f "$ghostty_config" ]] &&
+      grep -q '^command = /opt/homebrew/bin/fish --login --interactive$' "$ghostty_config" &&
+      grep -q '^shell-integration = fish$' "$ghostty_config"; then
+    ok "Ghostty/cmux fish config is tracked"
+  else
+    fail "Ghostty/cmux fish config is missing fish settings"
+  fi
+
+  local home_ghostty_config="$HOME/.config/ghostty/config"
+  if [[ -f "$home_ghostty_config" ]]; then
+    if grep -q '^command = /opt/homebrew/bin/fish --login --interactive$' "$home_ghostty_config" &&
+        grep -q '^shell-integration = fish$' "$home_ghostty_config"; then
+      ok "Ghostty/cmux fish config is applied"
+    else
+      warn "Ghostty/cmux config exists but does not select fish"
+    fi
+  else
+    warn "Ghostty/cmux fish config is not applied yet; run chezmoi apply or macos/defaults.sh"
+  fi
 }
 
 check_dotfiles() {
@@ -270,6 +307,16 @@ check_dotfiles() {
   else
     fail "doctor.sh has a syntax error"
   fi
+
+  local script
+  for script in "$repo_root"/dotfiles/chezmoi/private_dot_local/bin/executable_*; do
+    [[ -e "$script" ]] || continue
+    if bash -n "$script"; then
+      ok "$(basename "$script" | sed 's/^executable_//') syntax is valid"
+    else
+      fail "$(basename "$script" | sed 's/^executable_//') has a syntax error"
+    fi
+  done
 
   if zsh -n "$repo_root/dotfiles/chezmoi/dot_zshrc"; then
     ok "zshrc syntax is valid"
@@ -300,6 +347,15 @@ check_dotfiles() {
   else
     fail "chezmoi is missing"
   fi
+
+  local cmd
+  for cmd in setup-doctor repos-update repupd cleanup-dsstore myip ports del flushdns op-env-edit; do
+    if [[ -x "$HOME/.local/bin/$cmd" ]]; then
+      ok "$cmd is applied in ~/.local/bin"
+    else
+      warn "$cmd is not applied in ~/.local/bin yet"
+    fi
+  done
 }
 
 check_languages() {

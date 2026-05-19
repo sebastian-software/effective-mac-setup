@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+target="${1:-.}"
+
+if [[ ! -d "$target" ]]; then
+  echo "cleanup-dsstore: target is not a directory: $target" >&2
+  exit 2
+fi
+
+find "$target" -name .DS_Store -type f -delete

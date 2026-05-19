@@ -1,2 +1,9 @@
 # Homebrew on Apple Silicon.
-eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+fi
+
+# Shared commands managed by chezmoi live here so login shells and terminal
+# launched workflows can find the same helpers as interactive zsh/fish.
+typeset -U path PATH
+path=("$HOME/.local/bin" $path)

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+setup_repo="${EFFECTIVE_MAC_SETUP:-$HOME/Workspace/effective-mac-setup}"
+doctor="$setup_repo/scripts/doctor.sh"
+
+if [[ ! -x "$doctor" ]]; then
+  echo "setup doctor not found at $doctor" >&2
+  exit 127
+fi
+
+exec "$doctor" "$@"

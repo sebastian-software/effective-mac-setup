@@ -1,0 +1,7 @@
+# cmux uses Ghostty for terminal rendering. Keep interactive sessions on fish
+# without changing the system login shell.
+
+# BEGIN effective-mac-setup fish shell
+command = /opt/homebrew/bin/fish --login --interactive
+shell-integration = fish
+# END effective-mac-setup fish shell

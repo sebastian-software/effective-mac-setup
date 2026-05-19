@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: repos-update [root]
+
+Find Git worktrees below root, skip dirty repos, and run git pull --ff-only.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+root="${1:-.}"
+if [[ ! -d "$root" ]]; then
+  echo "repos-update: root does not exist: $root" >&2
+  exit 2
+fi
+
+root="$(cd "$root" && pwd)"
+
+find "$root" -maxdepth 4 -type d -name .git -prune -print | sort | while IFS= read -r gitdir; do
+  worktree="${gitdir%/.git}"
+  label="${worktree#$root/}"
+  printf -- '- Updating: %s\n' "$label"
+
+  if ! git -C "$worktree" diff --quiet || ! git -C "$worktree" diff --cached --quiet; then
+    printf '  skipped: working tree has local changes\n' >&2
+    continue
+  fi
+
+  git -C "$worktree" pull --ff-only
+done
