@@ -175,9 +175,9 @@ defaults write com.apple.finder FXICloudDriveDocuments -bool true
 
 # Interactive shells: use fish in Terminal and cmux/Ghostty without chsh.
 #
-# Why: try fish for completions/suggestions while keeping zsh as the account
-# login shell and fallback. Terminal profiles are only touched when they already
-# exist. cmux uses Ghostty configuration for terminal rendering.
+# Why: fish is the default UI shell for owned terminals, while zsh remains the
+# account login shell and system fallback. Terminal profiles are only touched
+# when they already exist. cmux uses Ghostty configuration for terminal rendering.
 configure_terminal_for_fish
 configure_ghostty_for_fish
 

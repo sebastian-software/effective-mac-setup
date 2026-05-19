@@ -14,8 +14,8 @@ brew "fnm"
 # https://starship.rs/
 brew "starship"
 
-# fish: interactive shell trial for Terminal and cmux; zsh remains the login
-# and fallback shell.
+# fish: default interactive shell for Terminal and cmux; zsh remains the account
+# login shell and system fallback.
 # https://fishshell.com/
 brew "fish"
 

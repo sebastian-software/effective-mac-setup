@@ -3,7 +3,9 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 fi
 
-# Shared commands managed by chezmoi live here so login shells and terminal
-# launched workflows can find the same helpers as interactive zsh/fish.
+# Shared commands managed by chezmoi and pnpm global CLIs live here so login
+# shells and terminal-launched workflows can find the same helpers.
 typeset -U path PATH
-path=("$HOME/.local/bin" $path)
+export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
+mkdir -p "$PNPM_HOME/bin"
+path=("$HOME/.local/bin" "$PNPM_HOME" "$PNPM_HOME/bin" $path)

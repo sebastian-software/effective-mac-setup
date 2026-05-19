@@ -28,6 +28,11 @@ fnm use lts-latest
 echo "==> Enabling Corepack"
 corepack enable
 
+echo "==> Preparing pnpm global bin directory"
+export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
+export PATH="$PNPM_HOME:$PNPM_HOME/bin:$PATH"
+mkdir -p "$PNPM_HOME/bin"
+
 echo "==> Checking chezmoi"
 if command -v chezmoi >/dev/null 2>&1; then
   mkdir -p "$HOME/.config/chezmoi"

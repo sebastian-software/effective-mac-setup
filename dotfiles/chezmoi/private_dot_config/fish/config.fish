@@ -1,5 +1,5 @@
-# Fish is the interactive shell trial for Terminal and cmux. Zsh stays the
-# login/fallback shell, so keep this file explicit and boring.
+# Fish is the default interactive shell for Terminal and cmux. Zsh stays the
+# login/system fallback shell, so keep this file explicit and boring.
 
 function __path_prepend
     set -l dir $argv[1]
@@ -20,6 +20,13 @@ if set -q NODE_OPTIONS
 else
     set -gx NODE_OPTIONS "--max-old-space-size=16384"
 end
+
+# pnpm uses PNPM_HOME for global binaries installed via "pnpm -g". Depending on
+# pnpm/Corepack state it may expect PNPM_HOME itself or PNPM_HOME/bin in PATH.
+set -q PNPM_HOME; or set -gx PNPM_HOME "$HOME/Library/pnpm"
+mkdir -p "$PNPM_HOME/bin"
+__path_prepend "$PNPM_HOME"
+__path_prepend "$PNPM_HOME/bin"
 
 set -q GOPATH; or set -gx GOPATH "$HOME/go"
 set -q GOBIN; or set -gx GOBIN "$GOPATH/bin"

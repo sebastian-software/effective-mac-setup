@@ -134,10 +134,11 @@ scripts/doctor.sh --fix
 - Node.js is managed through `fnm`, not Homebrew Node.
 - Node.js gets a global 16GB memory ceiling through `NODE_OPTIONS` for large frontend builds, type checks, and code-generation tasks.
 - Package manager is `pnpm` through Corepack.
+- pnpm global CLIs use `PNPM_HOME=$HOME/Library/pnpm` with `$PNPM_HOME` and `$PNPM_HOME/bin` in `PATH`.
 - Zsh remains the login/fallback shell.
-- Fish is the interactive Terminal/cmux shell trial.
+- Fish is the default interactive shell for Terminal and cmux.
 - Shared commands live in `~/.local/bin` so zsh, fish, Terminal, cmux, and agentic workflows use the same entrypoints.
-- zoxide provides smart directory jumping for zsh and fish; fzf is intentionally not part of this first shell block.
+- zoxide provides smart directory jumping for zsh and fish.
 - Editor is Zed; VS Code remains a commented fallback in the Brewfile.
 - Prompt is Starship with a lean managed config.
 - GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and Mac App Store apps are tracked in the Brewfile.

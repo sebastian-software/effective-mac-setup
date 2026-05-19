@@ -1,6 +1,13 @@
 # cmux uses Ghostty for terminal rendering. Keep interactive sessions on fish
 # without changing the system login shell.
 
+# Cursor: use a steady block cursor. Ghostty shell integration may otherwise
+# switch the prompt cursor to a blinking bar, so cursor control is disabled
+# while keeping the rest of shell integration on.
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
 # BEGIN effective-mac-setup fish shell
 command = /opt/homebrew/bin/fish --login --interactive
 shell-integration = fish

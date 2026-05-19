@@ -20,6 +20,12 @@ export LC_ALL="de_DE.UTF-8"
 # builds, type checks, and code-generation tasks.
 export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--max-old-space-size=16384"
 
+# pnpm uses PNPM_HOME for global binaries installed via "pnpm -g". Depending on
+# pnpm/Corepack state it may expect PNPM_HOME itself or PNPM_HOME/bin in PATH.
+export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
+mkdir -p "$PNPM_HOME/bin"
+path=("$PNPM_HOME" "$PNPM_HOME/bin" $path)
+
 # Go tools installed with "go install" land in GOBIN. Keep this explicit so
 # project CLIs are available on fresh machines.
 export GOPATH="${GOPATH:-$HOME/go}"

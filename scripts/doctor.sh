@@ -169,6 +169,10 @@ fix_node() {
   fnm default lts-latest
   fnm use lts-latest
 
+  export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
+  export PATH="$PNPM_HOME:$PNPM_HOME/bin:$PATH"
+  mkdir -p "$PNPM_HOME/bin"
+
   if command -v corepack >/dev/null 2>&1; then
     corepack enable
     corepack prepare pnpm@latest --activate
@@ -380,6 +384,13 @@ check_languages() {
 
   if command -v pnpm >/dev/null 2>&1; then
     ok "pnpm $(pnpm --version)"
+    local expected_pnpm_home="${PNPM_HOME:-$HOME/Library/pnpm}"
+    if PNPM_HOME="$expected_pnpm_home" PATH="$expected_pnpm_home:$expected_pnpm_home/bin:$PATH" pnpm bin -g >/dev/null 2>&1; then
+      ok "pnpm global bin directory is configured"
+    else
+      warn "pnpm global bin directory is not ready"
+      detail "Open a new managed shell or run scripts/doctor.sh --fix."
+    fi
   else
     warn "pnpm is missing; run scripts/bootstrap.sh or scripts/doctor.sh --fix"
   fi
