@@ -359,7 +359,11 @@ check_auth_network() {
     if run_with_timeout 8 ssh-add -l; then
       ok "SSH agent has identities"
     else
-      warn "SSH agent has no visible identities or is unavailable"
+      if printf '%s\n' "$LAST_OUTPUT" | grep -q "Operation not permitted"; then
+        warn "SSH agent socket is present but not accessible from this process"
+      else
+        warn "SSH agent has no visible identities or is unavailable"
+      fi
       detail "$(first_line "$LAST_OUTPUT")"
     fi
   else
@@ -378,18 +382,26 @@ check_auth_network() {
   fi
 
   if command -v mas >/dev/null 2>&1; then
+    local mas_config_output=""
     if run_with_timeout 8 mas config; then
       ok "MAS config is available"
+      mas_config_output="$LAST_OUTPUT"
     else
       warn "MAS config check failed or timed out"
       detail "$(first_line "$LAST_OUTPUT")"
+      mas_config_output="$LAST_OUTPUT"
     fi
 
-    if run_with_timeout 8 mas list; then
-      ok "MAS app list is available"
+    if printf '%s\n' "$mas_config_output" | grep -q "Operation not permitted"; then
+      warn "MAS app list skipped because this process has restricted App Store access"
+      detail "Run scripts/doctor.sh from a normal Terminal to verify MAS."
     else
-      warn "MAS list failed or timed out"
-      detail "$(first_line "$LAST_OUTPUT")"
+      if run_with_timeout 8 mas list; then
+        ok "MAS app list is available"
+      else
+        warn "MAS list failed or timed out"
+        detail "$(first_line "$LAST_OUTPUT")"
+      fi
     fi
   else
     fail "mas is missing"
