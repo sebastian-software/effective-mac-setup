@@ -149,8 +149,8 @@ cask "codex"
 cask "downie"
 
 # Helium: floating browser window for picture-in-picture style workflows.
-# https://github.com/JadenGeller/Helium
-cask "helium"
+# https://helium.computer/
+cask "helium-browser"
 
 # IINA: modern macOS media player.
 # https://iina.io/
