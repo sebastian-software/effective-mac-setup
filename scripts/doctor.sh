@@ -272,15 +272,19 @@ check_tools() {
   fi
 
   homebrew_tool_ok git git
+  homebrew_tool_ok git-lfs git-lfs
   homebrew_tool_ok gh gh
   homebrew_tool_ok fnm fnm
   homebrew_tool_ok starship starship
   homebrew_tool_ok fish fish
   homebrew_tool_ok zoxide zoxide
   homebrew_tool_ok ripgrep rg
+  homebrew_tool_ok semgrep semgrep
   homebrew_tool_ok fd fd
   homebrew_tool_ok jq jq
+  homebrew_tool_ok wget wget
   homebrew_tool_ok bat bat
+  homebrew_tool_ok hyperfine hyperfine
   homebrew_tool_ok eza eza
   homebrew_tool_ok mas mas
   homebrew_tool_ok chezmoi chezmoi

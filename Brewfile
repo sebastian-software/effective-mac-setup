@@ -2,6 +2,10 @@
 # https://git-scm.com
 brew "git"
 
+# Git LFS: support repositories that intentionally version large binary assets.
+# https://git-lfs.com/
+brew "git-lfs"
+
 # GitHub CLI: auth, repo, issue, PR, and Actions workflows from the terminal.
 # https://cli.github.com/
 brew "gh"
@@ -27,6 +31,11 @@ brew "zoxide"
 # https://github.com/BurntSushi/ripgrep
 brew "ripgrep"
 
+# Semgrep: static analysis for code-pattern, bug, and security checks; complements
+# ripgrep instead of replacing text search.
+# https://semgrep.dev/
+brew "semgrep"
+
 # fd: fast, friendly find replacement for locating files in projects.
 # https://github.com/sharkdp/fd
 brew "fd"
@@ -35,9 +44,17 @@ brew "fd"
 # https://jqlang.github.io/jq/
 brew "jq"
 
+# wget: pragmatic file retrieval fallback alongside macOS curl.
+# https://www.gnu.org/software/wget/
+brew "wget"
+
 # bat: cat replacement with syntax highlighting and Git-aware output.
 # https://github.com/sharkdp/bat
 brew "bat"
+
+# hyperfine: small benchmarking tool for comparing CLI and build command timings.
+# https://github.com/sharkdp/hyperfine
+brew "hyperfine"
 
 # eza: maintained ls replacement with clearer file listings.
 # https://eza.rocks/

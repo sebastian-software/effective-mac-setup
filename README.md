@@ -203,6 +203,7 @@ edit the local mapping and `op-env-load` to reload it in the current shell.
 - Prompt is Starship.
 - Editor is Zed.
 - zoxide provides smart directory jumping.
+- Git LFS, hyperfine, wget, and Semgrep are tracked as useful baseline CLI tools.
 - GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and reviewed Mac App Store apps are tracked in the Brewfile.
 
 ## Useful Checks
