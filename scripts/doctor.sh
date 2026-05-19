@@ -356,15 +356,17 @@ check_auth_network() {
 
   if [[ -n "${SSH_AUTH_SOCK:-}" ]]; then
     ok "SSH_AUTH_SOCK is set"
-    if run_with_timeout 8 ssh-add -l; then
-      ok "SSH agent has identities"
-    else
-      if printf '%s\n' "$LAST_OUTPUT" | grep -q "Operation not permitted"; then
-        warn "SSH agent socket is present but not accessible from this process"
+    local origin_url
+    origin_url="$(git -C "$repo_root" remote get-url origin 2>/dev/null || true)"
+    if [[ "$origin_url" == git@* || "$origin_url" == ssh://* ]]; then
+      if run_with_timeout 8 git -C "$repo_root" ls-remote --heads origin main; then
+        ok "Git over SSH can reach origin"
       else
-        warn "SSH agent has no visible identities or is unavailable"
+        warn "Git over SSH could not reach origin from this process"
+        detail "$(first_line "$LAST_OUTPUT")"
       fi
-      detail "$(first_line "$LAST_OUTPUT")"
+    else
+      warn "origin is not an SSH remote; skipping Git SSH auth check"
     fi
   else
     warn "SSH_AUTH_SOCK is not set; 1Password SSH Agent may not be active"
