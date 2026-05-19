@@ -8,8 +8,9 @@ shell helpers in `~/.local/bin`, and applies only the macOS defaults that are
 explicitly documented in this repo.
 
 The setup is tuned for modern application and frontend-adjacent development:
-Node.js, pnpm, GitHub, Zed, Go, Rust, shell tooling, and a clean terminal
-experience. It is intentionally small enough to understand and fork.
+Node.js, pnpm, GitHub, Zed, Go, Rust, containers, shell tooling, browsers,
+media utilities, communication apps, and a clean terminal experience. It is
+intentionally small enough to understand and fork.
 
 ## Why This Exists
 
@@ -207,7 +208,8 @@ edit the local mapping and `op-env-load` to reload it in the current shell.
 - Git LFS, hyperfine, wget, and Semgrep are tracked as useful baseline CLI tools.
 - Containers use the Docker CLI with Colima as the lightweight local runtime.
 - Colima is configured for native Apple Silicon with VZ, virtiofs, Docker runtime, BuildKit, no default amd64 emulation, and a writable `~/Workspace` mount.
-- GitHub Desktop, cmux, Firefox, Chrome, Go, Rust, and reviewed Mac App Store apps are tracked in the Brewfile.
+- Browser coverage includes Firefox, Chrome, Helium, and Polypane.
+- App coverage includes GitHub Desktop, cmux, Claude, Codex, Ollama, creative/media utilities, communication apps, backup, finance, and reviewed Mac App Store apps.
 
 ## Useful Checks
 
@@ -222,6 +224,8 @@ pnpm --version
 pnpm bin -g
 go version
 rustc --version
+colima status
+docker context ls
 ```
 
 ## Adapting This For Yourself
@@ -240,7 +244,7 @@ Good first customizations:
 - Replace the Git identity and signing key.
 - Review Mac App Store entries.
 - Adjust Dock items in `macos/defaults.sh`.
-- Decide whether Chrome, Firefox, cmux, Zed, Go, and Rust fit your workflow.
+- Decide which browsers, communication apps, creative/media tools, cmux, Zed, Go, Rust, and container tools fit your workflow.
 - Add or remove shell helpers in `dotfiles/chezmoi/private_dot_local/bin`.
 
 ## Still Manual
