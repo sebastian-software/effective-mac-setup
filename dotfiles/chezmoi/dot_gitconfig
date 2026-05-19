@@ -3,15 +3,26 @@
   # while still associating commits with the GitHub account.
   name = Sebastian Werner
   email = swernerx@users.noreply.github.com
+  # SSH commit signing is backed by the 1Password SSH agent. The public key is
+  # not secret; 1Password keeps the private key material out of this repo.
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7s8q4KS/ElAYW/CASH2XjvEy89jQAvNkAxOylKjXXj
 
 [init]
   defaultBranch = main
 
 [pull]
-  rebase = false
+  # Keep local history linear when integrating upstream changes.
+  rebase = true
 
 [push]
+  default = simple
   autoSetupRemote = true
+  # Send annotated tags with the commit they point at.
+  followTags = true
+
+[rebase]
+  # Preserve local work when rebasing a dirty tree.
+  autoStash = true
 
 [fetch]
   prune = true
@@ -21,6 +32,10 @@
 
 [core]
   excludesfile = ~/.gitignore_global
+  editor = zed --wait
+  autocrlf = false
+  eol = lf
+  safecrlf = false
 
 [branch]
   sort = -committerdate
@@ -32,6 +47,11 @@
   # Highlight moved code in diffs. Inspired by the "make Git output easier to
   # read" defaults commonly seen in mathiasbynens/dotfiles and paulirish/dotfiles.
   colorMoved = default
+  renames = true
+  compactionHeuristic = true
+
+[color]
+  ui = auto
 
 [merge]
   # zdiff3 includes the merge base in conflict markers and is easier to reason
@@ -42,6 +62,15 @@
   # Show the staged diff in the commit editor. As seen in many mature dotfiles,
   # this nudges commit messages toward the actual change.
   verbose = true
+  # Sign commits with the 1Password-backed SSH signing key.
+  gpgsign = true
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+  allowedSignersFile = ~/.config/git/allowed_signers
 
 [status]
   # Surface hidden stash state during normal status checks.
@@ -59,12 +88,30 @@
   pl = pull
   co = checkout
   sw = switch
+  ci = commit
+  cl = clone
   b = branch --sort=-committerdate
+  br = branch
 
   # Repository insight helpers.
   lg = log --graph --abbrev-commit --decorate --date=relative --format=format:%C(bold blue)%h%C(reset) %C(green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset) --all
+  ls = log --pretty=format:%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%an] --decorate
+  ll = log --pretty=format:%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%an] --decorate --numstat
+  today = log --pretty=format:%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%an] --decorate --since midnight
+  datelog = log --date=short --pretty=format:%ad %x08 %aN %s
+  hash = rev-parse --short HEAD
+  longhash = rev-parse HEAD
+  stats = shortlog -sn
+  dc = diff --cached
+  wdiff = diff --word-diff
+  uncommit = reset --soft HEAD^
   aliases = config --get-regexp ^alias\\.
   root = rev-parse --show-toplevel
+
+  # Remove ignored build artifacts while preserving untracked files. Use the
+  # preview first when you want to see what Git would delete.
+  distclean-preview = clean -ndX
+  distclean = clean -dfX
 
   # Delete only merged local branches, never protected branch names, and always
   # ask first. This keeps the common cleanup helper from becoming a footgun.

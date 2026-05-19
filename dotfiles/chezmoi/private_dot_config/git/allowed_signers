@@ -1,0 +1,3 @@
+# Public keys allowed to verify SSH-signed Git commits locally.
+# Format: principals public-key
+swernerx@users.noreply.github.com,s.werner@sebastian-software.de ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7s8q4KS/ElAYW/CASH2XjvEy89jQAvNkAxOylKjXXj
