@@ -306,7 +306,9 @@ check_editor_prompt() {
   local ghostty_config="$repo_root/dotfiles/chezmoi/private_dot_config/ghostty/config"
 
   if [[ -f "$starship_config" ]]; then
-    if STARSHIP_CONFIG="$starship_config" starship print-config >/dev/null 2>&1; then
+    if ! command -v starship >/dev/null 2>&1; then
+      fail "starship is missing; cannot validate starship config"
+    elif STARSHIP_CONFIG="$starship_config" starship print-config >/dev/null 2>&1; then
       ok "starship config parses"
     else
       fail "starship config does not parse"
