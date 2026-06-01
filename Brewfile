@@ -132,10 +132,6 @@ cask "google-chrome"
 # https://affinity.serif.com/
 cask "affinity"
 
-# Backblaze: cloud backup client for the Mac.
-# https://www.backblaze.com/
-cask "backblaze"
-
 # Claude: Anthropic's desktop app for AI-assisted work.
 # https://claude.ai/download
 cask "claude"
@@ -159,10 +155,6 @@ cask "iina"
 # ImageOptim: image compression utility for smaller assets.
 # https://imageoptim.com/mac
 cask "imageoptim"
-
-# MakeMKV: optical disc backup and conversion utility.
-# https://www.makemkv.com/
-cask "makemkv"
 
 # MoneyMoney: personal finance and banking app.
 # https://moneymoney-app.com/
