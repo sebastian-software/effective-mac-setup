@@ -375,11 +375,9 @@ check_backup_exclusions() {
   else
     warn "Backup exclusions differ from the managed paths"
     while IFS= read -r line; do
-      case "$line" in
-        OK\ *|WARN\ *)
-          detail "$line"
-          ;;
-      esac
+      [[ -n "$line" ]] || continue
+      line="${line#"${line%%[![:space:]]*}"}"
+      detail "$line"
     done <<< "$output"
     detail "Review and run macos/backup-exclusions.sh --apply."
   fi
