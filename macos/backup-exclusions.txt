@@ -1,0 +1,62 @@
+# Paths are relative to the current user's home directory unless they start
+# with /. Blank lines and comments are ignored.
+#
+# This list is intentionally limited to data that is disposable, downloadable,
+# or reproducible from source. Do not add broad file extensions such as sqlite,
+# db, or log: those can contain unique application data.
+
+# Personal machine conventions. Downloads is an inbox; Workspace is backed by
+# Git remotes instead. This also covers Workspace/.codex worktrees.
+Downloads
+Workspace
+
+# Generic user and application caches.
+.cache
+Library/Caches
+
+# Codex runtime data that can be recreated. Keep the rest of ~/.codex: local
+# chats, memories, configuration, rules, skills, automations, and app state do
+# not all sync to the cloud.
+.codex/worktrees
+.codex/cache
+.codex/.tmp
+.codex/plugins/cache
+.codex/plugins/.plugin-appserver
+.codex/computer-use/Codex Computer Use.app
+
+# JavaScript package-manager caches and stores.
+.npm
+.bun/install/cache
+.yarn/berry/cache
+Library/pnpm/store
+
+# Language toolchains, dependency caches, and downloaded SDKs.
+.rustup
+.cargo/registry
+.cargo/git
+.gradle/caches
+.gradle/wrapper/dists
+.gradle/daemon
+.m2/repository
+.ivy2/cache
+.nuget/packages
+.pub-cache
+go/pkg/mod
+go/pkg/sumdb
+.sdkman/archives
+.sdkman/tmp
+Library/Android/sdk
+
+# Apple-platform build caches. Simulator devices are deliberately not excluded:
+# they can contain app data that is useful during development.
+Library/Developer/Xcode/DerivedData
+Library/Developer/CoreSimulator/Caches
+
+# Downloadable local AI models.
+.ollama/models
+Library/Application Support/MacWhisper/models
+
+# Container VM disks. Persistent databases and volumes inside these VMs are not
+# backed up; export important data separately.
+.colima/_lima/_disks
+Library/Containers/com.docker.docker/Data/vms

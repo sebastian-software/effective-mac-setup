@@ -31,9 +31,12 @@ does not store secrets, and it does not try to own the whole machine.
 - `Brewfile`: Homebrew formulae, casks, taps, and reviewed Mac App Store apps.
 - `dotfiles/chezmoi`: Git, zsh, fish, Starship, Zed, Ghostty/cmux, Colima, and shared helper commands.
 - `macos/defaults.sh`: small, named macOS settings that are safe to review before applying.
+- `macos/backup-exclusions.txt`: reviewable paths that should not consume Time Machine or Backblaze storage.
+- `macos/backup-exclusions.sh`: idempotent apply and check commands for both backup systems.
 - `scripts/bootstrap.sh`: first-run installer for packages, dotfiles, Node LTS, Corepack, and pnpm.
-- `scripts/doctor.sh`: health check for packages, apps, dotfiles, runtimes, auth, MAS, and shell setup.
+- `scripts/doctor.sh`: health check for packages, apps, dotfiles, runtimes, backup policy, auth, MAS, and shell setup.
 - `docs/adr-0001-macos-settings.md`: why macOS settings are curated one by one instead of blindly exported.
+- `docs/adr-0002-backup-exclusions.md`: why backup exclusions are path-based and why `~/.codex` stays partially backed up.
 
 ## Included Apps And Tools
 
@@ -115,7 +118,23 @@ macos/defaults.sh
 This also configures macOS Terminal and cmux/Ghostty to start fish without
 changing the account login shell via `chsh`.
 
-### 6. Run the Doctor
+### 6. Review and Apply Backup Exclusions
+
+The same explicit path list configures Time Machine and Backblaze. Read it
+before applying it because `Downloads`, the complete `Workspace`, and container
+VM disks are intentionally not backed up:
+
+```sh
+sed -n '1,240p' macos/backup-exclusions.txt
+macos/backup-exclusions.sh --dry-run
+macos/backup-exclusions.sh --apply
+```
+
+Run the script as your normal user. It requests `sudo` only for Time Machine's
+fixed-path exclusions. The terminal needs Full Disk Access for that operation.
+Backblaze must already be installed and initialized.
+
+### 7. Run the Doctor
 
 ```sh
 scripts/doctor.sh
@@ -211,6 +230,31 @@ CARGO_REGISTRY_TOKEN=op://Private/Cargo/Registry Token
 Zsh and fish load that file with `op read` when it exists. Use `op-env-edit` to
 edit the local mapping and `op-env-load` to reload it in the current shell.
 
+## Backup Exclusions
+
+`macos/backup-exclusions.txt` contains paths relative to the current user's home
+directory. It covers disposable project trees, caches, downloaded toolchains,
+build products, local AI models, and container VM disks. The script applies the
+list through `tmutil` and Backblaze's supported `bzcli`; it does not edit
+Backblaze XML files.
+
+`~/Workspace` is excluded as a machine convention. Repositories must therefore
+be pushed to their Git remotes: uncommitted work in this directory is not
+protected by Time Machine or Backblaze. Codex worktrees under
+`~/Workspace/.codex` are covered automatically.
+
+The complete `~/.codex` directory remains backed up. Local chats do not all
+sync to the cloud, and the directory also contains configuration, memories,
+rules, skills, automations, generated artifacts, and application state. Only
+its reproducible worktrees, caches, temporary plugin downloads, and downloaded
+helper apps are excluded.
+
+Container VM disks are also disposable by policy. Export any important
+databases or persistent volumes from Colima or Docker Desktop separately.
+
+See [ADR 0002](docs/adr-0002-backup-exclusions.md) for the boundaries and
+trade-offs.
+
 ## Current Defaults
 
 - Git uses SSH commit signing through 1Password.
@@ -225,6 +269,7 @@ edit the local mapping and `op-env-load` to reload it in the current shell.
 - Git LFS, hyperfine, wget, and Semgrep are tracked as useful baseline CLI tools.
 - Containers use the Docker CLI with Colima as the lightweight local runtime.
 - Colima is configured for native Apple Silicon with VZ, virtiofs, Docker runtime, BuildKit, no default amd64 emulation, and a writable `~/Workspace` mount.
+- Time Machine and Backblaze share a curated list of reproducible data to exclude.
 - Browser coverage includes Firefox, Chrome, Helium, and Polypane.
 - App coverage includes GitHub Desktop, cmux, Claude, Codex, Ollama, creative/media utilities, communication apps, backup, finance, and reviewed Mac App Store apps.
 
@@ -232,6 +277,7 @@ edit the local mapping and `op-env-load` to reload it in the current shell.
 
 ```sh
 scripts/doctor.sh
+macos/backup-exclusions.sh --check
 brew bundle check --no-upgrade --file Brewfile
 chezmoi status
 chezmoi diff
@@ -255,6 +301,7 @@ Start with these files:
 - `dotfiles/chezmoi/private_dot_config/ghostty/config`: adjust cmux/Ghostty behavior.
 - `dotfiles/chezmoi/private_dot_colima/default/colima.yaml`: adjust the default Colima VM resources and mounts.
 - `macos/defaults.sh`: review every setting before applying it.
+- `macos/backup-exclusions.txt`: decide which reproducible data should stay out of both backups.
 
 Good first customizations:
 
@@ -271,4 +318,5 @@ Good first customizations:
 - Verify GitHub SSH auth in a normal terminal:
   `ssh -T git@github.com`
 - Sign in to the Mac App Store before relying on MAS checks.
-- Re-run `scripts/doctor.sh` after changing packages, dotfiles, or macOS defaults.
+- Initialize Backblaze before applying its managed exclusions.
+- Re-run `scripts/doctor.sh` after changing packages, dotfiles, macOS defaults, or backup exclusions.

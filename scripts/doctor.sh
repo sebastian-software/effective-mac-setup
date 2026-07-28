@@ -350,6 +350,41 @@ check_macos_defaults() {
   default_value_ok com.apple.finder FXICloudDriveDocuments "1" "iCloud Documents"
 }
 
+check_backup_exclusions() {
+  section "Backup exclusions"
+  local exclusions_file="$repo_root/macos/backup-exclusions.txt"
+  local exclusions_script="$repo_root/macos/backup-exclusions.sh"
+  local output line
+
+  if [[ -s "$exclusions_file" ]]; then
+    ok "Backup exclusion paths are tracked"
+  else
+    fail "macos/backup-exclusions.txt is missing or empty"
+    return
+  fi
+
+  if [[ -x "$exclusions_script" ]] && bash -n "$exclusions_script"; then
+    ok "backup-exclusions.sh is executable and has valid syntax"
+  else
+    fail "backup-exclusions.sh is missing, not executable, or has a syntax error"
+    return
+  fi
+
+  if output="$("$exclusions_script" --check 2>&1)"; then
+    ok "Time Machine and Backblaze match the managed backup exclusions"
+  else
+    warn "Backup exclusions differ from the managed paths"
+    while IFS= read -r line; do
+      case "$line" in
+        OK\ *|WARN\ *)
+          detail "$line"
+          ;;
+      esac
+    done <<< "$output"
+    detail "Review and run macos/backup-exclusions.sh --apply."
+  fi
+}
+
 colima_config_has_expected_defaults() {
   local config="$1"
 
@@ -648,6 +683,7 @@ check_homebrew
 check_tools
 check_apps
 check_macos_defaults
+check_backup_exclusions
 check_editor_prompt
 check_dotfiles
 check_languages
