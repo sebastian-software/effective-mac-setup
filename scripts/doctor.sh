@@ -152,24 +152,99 @@ homebrew_tool_ok() {
   fi
 }
 
+homebrew_keg_tool_ok() {
+  local formula="$1"
+  local cmd="$2"
+
+  if ! brew list --formula "$formula" >/dev/null 2>&1; then
+    fail "$formula Homebrew formula is missing"
+    return
+  fi
+
+  local formula_prefix expected_path resolved_path
+  formula_prefix="$(brew --prefix "$formula" 2>/dev/null || true)"
+  expected_path="$formula_prefix/bin/$cmd"
+
+  if [[ -z "$formula_prefix" || ! -x "$expected_path" ]]; then
+    fail "$cmd is missing from the $formula Homebrew keg"
+    return
+  fi
+
+  resolved_path="$(command -v "$cmd" 2>/dev/null || true)"
+  if [[ -z "$resolved_path" ]]; then
+    ok "$cmd is available from the Homebrew keg ($expected_path)"
+    detail "Open a new managed shell to add it to PATH."
+  elif [[ "$resolved_path" == "$expected_path" ]]; then
+    ok "$cmd is available from Homebrew ($resolved_path)"
+  else
+    warn "$cmd resolves outside the $formula Homebrew keg ($resolved_path)"
+    detail "Expected the managed command at $expected_path."
+  fi
+}
+
 uv_tool_ok() {
   local package="$1"
   local cmd="$2"
+  local expected_python="$3"
+  local required_distribution="${4:-}"
+  local minimum_version="${5:-}"
 
   if ! command -v uv >/dev/null 2>&1; then
     fail "uv is missing; cannot validate $package"
     return
   fi
 
-  if ! uv tool list | grep -Fq "$package v"; then
-    fail "$package is not managed by uv"
+  local tool_root tool_python actual_python tool_bin_dir expected_path resolved_path
+  tool_root="$(uv tool dir 2>/dev/null || true)"
+  tool_python="$tool_root/$package/bin/python"
+
+  if [[ -z "$tool_root" || ! -x "$tool_python" ]]; then
+    fail "$package does not have a managed uv tool environment"
     return
   fi
 
-  if command -v "$cmd" >/dev/null 2>&1; then
-    ok "$cmd is available from uv ($(command -v "$cmd"))"
+  actual_python="$("$tool_python" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
+  if [[ "$actual_python" == "$expected_python" ]]; then
+    ok "$package uses uv-managed Python $expected_python"
   else
-    fail "$cmd is missing, though $package is managed by uv"
+    fail "$package uses Python $actual_python, expected $expected_python"
+  fi
+
+  if [[ -n "$required_distribution" ]]; then
+    if "$tool_python" -c '
+from importlib.metadata import version
+import re
+import sys
+
+distribution, minimum = sys.argv[1:]
+__import__(distribution)
+release = lambda value: tuple(
+    int(part) for part in re.match(r"\d+(?:\.\d+)*", value).group().split(".")
+)
+raise SystemExit(release(version(distribution)) < release(minimum))
+' "$required_distribution" "$minimum_version" >/dev/null 2>&1; then
+      ok "$package includes $required_distribution >= $minimum_version"
+    else
+      fail "$package is missing $required_distribution >= $minimum_version"
+    fi
+  fi
+
+  tool_bin_dir="$(uv tool dir --bin 2>/dev/null || true)"
+  expected_path="$tool_bin_dir/$cmd"
+  if [[ -z "$tool_bin_dir" || ! -x "$expected_path" ]]; then
+    fail "$cmd is missing from the uv tool bin directory"
+    return
+  fi
+
+  resolved_path="$(command -v "$cmd" 2>/dev/null || true)"
+  if [[ -z "$resolved_path" ]]; then
+    ok "$cmd is available from uv ($expected_path)"
+    detail "Open a new managed shell to add it to PATH."
+  elif [[ "$resolved_path" == "$expected_path" ]]; then
+    ok "$cmd is available from uv ($resolved_path)"
+  else
+    warn "$cmd resolves outside uv ($resolved_path)"
+    detail "Expected the managed command at $expected_path."
   fi
 }
 
@@ -333,12 +408,12 @@ check_tools() {
   homebrew_tool_ok ripgrep rg
   homebrew_tool_ok uv uv
   uv_python_ok 3.12
-  uv_tool_ok fonttools fonttools
-  uv_tool_ok huggingface-hub hf
-  uv_tool_ok openai-whisper whisper
-  uv_tool_ok semgrep semgrep
-  homebrew_tool_ok libpq psql
-  homebrew_tool_ok libpq pg_dump
+  uv_tool_ok fonttools fonttools 3.12
+  uv_tool_ok huggingface-hub hf 3.12 click 8.1
+  uv_tool_ok openai-whisper whisper 3.12
+  uv_tool_ok semgrep semgrep 3.12
+  homebrew_keg_tool_ok libpq psql
+  homebrew_keg_tool_ok libpq pg_dump
   homebrew_tool_ok fd fd
   homebrew_tool_ok jq jq
   homebrew_tool_ok wget wget

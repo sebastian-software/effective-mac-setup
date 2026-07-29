@@ -14,30 +14,59 @@ uv python install "$python_version"
 echo "==> Pinning the default uv Python to $python_version"
 uv python pin --global "$python_version"
 
-tool_is_installed() {
+tool_matches_configuration() {
   local package="$1"
-  uv tool list | grep -Fq "$package v"
+  local required_distribution="$2"
+  local minimum_version="$3"
+  local tool_python actual_python
+
+  tool_python="$(uv tool dir)/$package/bin/python"
+  [[ -x "$tool_python" ]] || return 1
+
+  actual_python="$("$tool_python" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
+  if [[ "$actual_python" != "$python_version" ]]; then
+    return 1
+  fi
+
+  if [[ -n "$required_distribution" ]]; then
+    if ! "$tool_python" -c '
+from importlib.metadata import version
+import re
+import sys
+
+distribution, minimum = sys.argv[1:]
+__import__(distribution)
+release = lambda value: tuple(
+    int(part) for part in re.match(r"\d+(?:\.\d+)*", value).group().split(".")
+)
+raise SystemExit(release(version(distribution)) < release(minimum))
+' "$required_distribution" "$minimum_version" >/dev/null 2>&1; then
+      return 1
+    fi
+  fi
 }
 
 install_tool() {
   local package="$1"
-  shift
+  local required_distribution="$2"
+  local minimum_version="$3"
+  shift 3
 
-  if tool_is_installed "$package"; then
-    echo "==> $package is already managed by uv"
+  if tool_matches_configuration "$package" "$required_distribution" "$minimum_version"; then
+    echo "==> $package already matches the managed uv configuration"
     return
   fi
 
-  echo "==> Installing $package with uv"
-  uv tool install --managed-python --python "$python_version" "$@" "$package"
+  echo "==> Reconciling $package with the managed uv configuration"
+  uv tool install --force --managed-python --python "$python_version" "$@" "$package"
 }
 
-install_tool fonttools
+install_tool fonttools "" ""
 
 # huggingface-hub 1.2.x imports click in its CLI but does not declare it in the
 # package metadata. Keep the compatibility dependency explicit until upstream
 # restores it.
-install_tool huggingface-hub --with "click>=8.1"
+install_tool huggingface-hub click 8.1 --with "click>=8.1"
 
-install_tool openai-whisper
-install_tool semgrep
+install_tool openai-whisper "" ""
+install_tool semgrep "" ""
