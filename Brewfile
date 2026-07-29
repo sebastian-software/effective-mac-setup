@@ -31,10 +31,15 @@ brew "zoxide"
 # https://github.com/BurntSushi/ripgrep
 brew "ripgrep"
 
-# Semgrep: static analysis for code-pattern, bug, and security checks; complements
-# ripgrep instead of replacing text search.
-# https://semgrep.dev/
-brew "semgrep"
+# uv: manages the shared Python 3.12 runtime, project environments, and Python
+# CLI tools without coupling them to Homebrew's Python release cadence.
+# https://docs.astral.sh/uv/
+brew "uv"
+
+# libpq: PostgreSQL client tools such as psql, pg_dump, and pg_restore without
+# installing or running a local PostgreSQL server.
+# https://www.postgresql.org/docs/current/libpq.html
+brew "libpq"
 
 # fd: fast, friendly find replacement for locating files in projects.
 # https://github.com/sharkdp/fd

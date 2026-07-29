@@ -152,6 +152,49 @@ homebrew_tool_ok() {
   fi
 }
 
+uv_tool_ok() {
+  local package="$1"
+  local cmd="$2"
+
+  if ! command -v uv >/dev/null 2>&1; then
+    fail "uv is missing; cannot validate $package"
+    return
+  fi
+
+  if ! uv tool list | grep -Fq "$package v"; then
+    fail "$package is not managed by uv"
+    return
+  fi
+
+  if command -v "$cmd" >/dev/null 2>&1; then
+    ok "$cmd is available from uv ($(command -v "$cmd"))"
+  else
+    fail "$cmd is missing, though $package is managed by uv"
+  fi
+}
+
+uv_python_ok() {
+  local version="$1"
+  local global_pin="${XDG_CONFIG_HOME:-$HOME/.config}/uv/.python-version"
+
+  if ! command -v uv >/dev/null 2>&1; then
+    fail "uv is missing; cannot validate Python $version"
+    return
+  fi
+
+  if uv python find --managed-python "$version" >/dev/null 2>&1; then
+    ok "Python $version is managed by uv"
+  else
+    fail "uv-managed Python $version is missing"
+  fi
+
+  if [[ -f "$global_pin" ]] && [[ "$(<"$global_pin")" == "$version" ]]; then
+    ok "uv defaults to Python $version"
+  else
+    fail "uv global Python pin is missing or does not select $version"
+  fi
+}
+
 app_ok() {
   local name="$1"
   local path="$2"
@@ -238,6 +281,15 @@ fix_node() {
   fi
 }
 
+fix_uv_tools() {
+  section "Fix: Python CLI tools"
+  if [[ -x "$repo_root/scripts/setup-uv-tools.sh" ]]; then
+    "$repo_root/scripts/setup-uv-tools.sh"
+  else
+    fail "scripts/setup-uv-tools.sh is missing or not executable"
+  fi
+}
+
 check_homebrew() {
   section "Homebrew"
   if command -v brew >/dev/null 2>&1; then
@@ -279,7 +331,14 @@ check_tools() {
   homebrew_tool_ok fish fish
   homebrew_tool_ok zoxide zoxide
   homebrew_tool_ok ripgrep rg
-  homebrew_tool_ok semgrep semgrep
+  homebrew_tool_ok uv uv
+  uv_python_ok 3.12
+  uv_tool_ok fonttools fonttools
+  uv_tool_ok huggingface-hub hf
+  uv_tool_ok openai-whisper whisper
+  uv_tool_ok semgrep semgrep
+  homebrew_tool_ok libpq psql
+  homebrew_tool_ok libpq pg_dump
   homebrew_tool_ok fd fd
   homebrew_tool_ok jq jq
   homebrew_tool_ok wget wget
@@ -472,6 +531,13 @@ check_dotfiles() {
     ok "doctor.sh syntax is valid"
   else
     fail "doctor.sh has a syntax error"
+  fi
+
+  if [[ -x "$repo_root/scripts/setup-uv-tools.sh" ]] &&
+      bash -n "$repo_root/scripts/setup-uv-tools.sh"; then
+    ok "setup-uv-tools.sh syntax is valid"
+  else
+    fail "setup-uv-tools.sh is missing, not executable, or has a syntax error"
   fi
 
   local script
@@ -673,6 +739,7 @@ check_auth_network() {
 
 if [[ "$fix_mode" == true ]]; then
   fix_brew
+  fix_uv_tools
   fix_chezmoi
   fix_node
 fi
