@@ -6,12 +6,22 @@ function __path_prepend
     contains -- "$dir" $PATH; or set -gx PATH "$dir" $PATH
 end
 
+# libpq is keg-only in Homebrew. Expose PostgreSQL client tools without
+# installing a local PostgreSQL server.
+if test -d /opt/homebrew/opt/libpq/bin
+    __path_prepend /opt/homebrew/opt/libpq/bin
+end
+
 __path_prepend "$HOME/.local/bin"
 
 set -gx EDITOR "zed --wait"
 set -gx VISUAL "zed --wait"
 set -gx LANG "de_DE.UTF-8"
 set -gx LC_ALL "de_DE.UTF-8"
+
+# Semgrep's native core currently needs an explicit PEM bundle on macOS when
+# installed as an isolated uv tool.
+set -q SSL_CERT_FILE; or set -gx SSL_CERT_FILE /etc/ssl/cert.pem
 
 if set -q NODE_OPTIONS
     if not string match -q "*--max-old-space-size=16384*" -- "$NODE_OPTIONS"

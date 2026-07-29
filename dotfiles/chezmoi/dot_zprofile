@@ -6,6 +6,11 @@ fi
 # Shared commands managed by chezmoi and pnpm global CLIs live here so login
 # shells and terminal-launched workflows can find the same helpers.
 typeset -U path PATH
+
+# libpq is keg-only in Homebrew. Expose PostgreSQL client tools without
+# installing a local PostgreSQL server.
+[[ -d /opt/homebrew/opt/libpq/bin ]] && path=(/opt/homebrew/opt/libpq/bin $path)
+
 export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
 mkdir -p "$PNPM_HOME/bin"
 path=("$HOME/.local/bin" "$PNPM_HOME" "$PNPM_HOME/bin" $path)

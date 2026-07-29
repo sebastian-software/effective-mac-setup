@@ -13,6 +13,9 @@ fi
 echo "==> Installing packages from Brewfile"
 brew bundle --file "$repo_root/Brewfile"
 
+echo "==> Installing Python CLI tools with uv"
+"$repo_root/scripts/setup-uv-tools.sh"
+
 echo "==> Checking fnm"
 if ! command -v fnm >/dev/null 2>&1; then
   echo "fnm is still not available. Open a new terminal or check Homebrew shellenv."
@@ -50,5 +53,6 @@ node --version
 npm --version
 corepack --version
 pnpm --version
+uv --version
 
 echo "==> Done"

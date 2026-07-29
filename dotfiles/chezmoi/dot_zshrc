@@ -1,6 +1,11 @@
 # Keep PATH entries unique when this file is sourced repeatedly during dotfile
 # work. This mirrors the small-shell-helper style seen in holman/dotfiles.
 typeset -U path PATH
+
+# libpq is keg-only in Homebrew. Expose PostgreSQL client tools without
+# installing a local PostgreSQL server.
+[[ -d /opt/homebrew/opt/libpq/bin ]] && path=(/opt/homebrew/opt/libpq/bin $path)
+
 path=("$HOME/.local/bin" $path)
 
 # Node.js versions are managed by fnm instead of Homebrew Node.
@@ -15,6 +20,10 @@ export VISUAL="zed --wait"
 # and reproducible across fresh Macs.
 export LANG="de_DE.UTF-8"
 export LC_ALL="de_DE.UTF-8"
+
+# Semgrep's native core currently needs an explicit PEM bundle on macOS when
+# installed as an isolated uv tool.
+export SSL_CERT_FILE="${SSL_CERT_FILE:-/etc/ssl/cert.pem}"
 
 # Give memory-hungry Node.js tools more headroom globally for large frontend
 # builds, type checks, and code-generation tasks.

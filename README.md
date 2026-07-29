@@ -29,6 +29,9 @@ does not store secrets, and it does not try to own the whole machine.
 ## What It Manages
 
 - `Brewfile`: Homebrew formulae, casks, taps, and reviewed Mac App Store apps.
+- `scripts/setup-uv-tools.sh`: Python 3.12 and isolated Python CLI tools managed by uv.
+- `~/.config/uv/.python-version`: Python 3.12 as the default for uv outside pinned projects.
+- `libpq`: PostgreSQL client tools in the shell without a local database server.
 - `dotfiles/chezmoi`: Git, zsh, fish, Starship, Zed, Ghostty/cmux, Colima, and shared helper commands.
 - `macos/defaults.sh`: small, named macOS settings that are safe to review before applying.
 - `macos/backup-exclusions.txt`: reviewable paths that should not consume Time Machine or Backblaze storage.
@@ -102,8 +105,9 @@ cd ~/Workspace/effective-mac-setup
 scripts/bootstrap.sh
 ```
 
-This runs `brew bundle`, prepares Node through `fnm`, enables Corepack/pnpm, and
-applies the managed dotfiles with `chezmoi`.
+This runs `brew bundle`, installs Python CLI tools through `uv`, prepares Node
+through `fnm`, enables Corepack/pnpm, and applies the managed dotfiles with
+`chezmoi`.
 
 ### 5. Review and Apply macOS Defaults
 
@@ -261,6 +265,7 @@ trade-offs.
 - Node.js is managed through `fnm`, not Homebrew Node.
 - Node.js gets a global 16GB memory ceiling through `NODE_OPTIONS`.
 - Package manager is `pnpm` through Corepack.
+- PostgreSQL access uses Homebrew `libpq` clients; no local PostgreSQL server is installed.
 - Fish is the default interactive shell for Terminal and cmux.
 - Zsh remains the account login shell and fallback.
 - Prompt is Starship.
