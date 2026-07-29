@@ -16,12 +16,16 @@ uv python pin --global "$python_version"
 
 tool_matches_configuration() {
   local package="$1"
-  local required_distribution="$2"
-  local minimum_version="$3"
-  local tool_python actual_python
+  local executable="$2"
+  local required_distribution="$3"
+  local minimum_version="$4"
+  local tool_python tool_executable actual_python
 
   tool_python="$(uv tool dir)/$package/bin/python"
   [[ -x "$tool_python" ]] || return 1
+
+  tool_executable="$(uv tool dir --bin)/$executable"
+  [[ -x "$tool_executable" ]] || return 1
 
   actual_python="$("$tool_python" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
   if [[ "$actual_python" != "$python_version" ]]; then
@@ -48,11 +52,12 @@ raise SystemExit(release(version(distribution)) < release(minimum))
 
 install_tool() {
   local package="$1"
-  local required_distribution="$2"
-  local minimum_version="$3"
-  shift 3
+  local executable="$2"
+  local required_distribution="$3"
+  local minimum_version="$4"
+  shift 4
 
-  if tool_matches_configuration "$package" "$required_distribution" "$minimum_version"; then
+  if tool_matches_configuration "$package" "$executable" "$required_distribution" "$minimum_version"; then
     echo "==> $package already matches the managed uv configuration"
     return
   fi
@@ -61,12 +66,12 @@ install_tool() {
   uv tool install --force --managed-python --python "$python_version" "$@" "$package"
 }
 
-install_tool fonttools "" ""
+install_tool fonttools fonttools "" ""
 
 # huggingface-hub 1.2.x imports click in its CLI but does not declare it in the
 # package metadata. Keep the compatibility dependency explicit until upstream
 # restores it.
-install_tool huggingface-hub click 8.1 --with "click>=8.1"
+install_tool huggingface-hub hf click 8.1 --with "click>=8.1"
 
-install_tool openai-whisper "" ""
-install_tool semgrep "" ""
+install_tool openai-whisper whisper "" ""
+install_tool semgrep semgrep "" ""
